@@ -1157,6 +1157,195 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
 @keyframes readIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){#textContentContainer.reader-content{animation:none}}
 
+
+/* =====================================================================
+   V12 - MODERASI + LAPORAN (gaya iOS 26 liquid glass)
+   ===================================================================== */
+.bottom-nav,.lens-inner{grid-template-columns:repeat(var(--cols,5),minmax(0,1fr))}
+.bottom-nav .nav-item[hidden]{display:none}
+.nav-badge{position:absolute;top:3px;left:calc(50% + 6px);min-width:18px;height:18px;padding:0 5px;border-radius:9px;display:grid;place-items:center;
+  font-size:10.5px;font-weight:800;color:#fff;background:linear-gradient(180deg,#FF6B5F,#FF3B30);box-shadow:0 0 0 2px var(--bg),0 3px 8px rgba(255,59,48,.45);z-index:3}
+.nav-badge[hidden]{display:none}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic.sm{width:17px;height:17px}
+
+/* tombol kaca ala iOS 26 (kapsul, highlight, tint) — tanpa blur per tombol supaya tetap ringan */
+.gbtn{--tint:rgba(120,120,128,.20);position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:7px;height:42px;padding:0 18px;border:0;border-radius:999px;
+  font-family:inherit;font-size:15px;font-weight:600;color:var(--text);cursor:pointer;-webkit-tap-highlight-color:transparent;
+  background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,.16)),var(--tint);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(15,23,42,.07),0 8px 18px rgba(15,23,42,.13),0 0 0 .5px rgba(15,23,42,.10);
+  transition:transform .28s cubic-bezier(.3,1.6,.5,1),filter .2s}
+.gbtn::after{content:"";position:absolute;left:10%;right:10%;top:2px;height:42%;border-radius:999px;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0))}
+.gbtn:active{transform:scale(.93);filter:brightness(.96)}
+.gbtn:disabled{opacity:.55;pointer-events:none}
+.gbtn.green{--tint:rgba(48,209,88,.92);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 -1px 0 rgba(0,80,20,.25),0 8px 20px rgba(48,209,88,.38)}
+.gbtn.red{--tint:rgba(255,69,58,.92);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 -1px 0 rgba(120,10,0,.25),0 8px 20px rgba(255,69,58,.36)}
+.gbtn.redsoft{--tint:rgba(255,69,58,.16);color:#FF3B30}
+.gbtn.blue{--tint:rgba(10,132,255,.92);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 8px 20px rgba(10,132,255,.36)}
+.gbtn.sm{height:34px;padding:0 14px;font-size:13px}
+.gbtn.block{width:100%}
+html[data-theme="dark"] .gbtn{background:linear-gradient(180deg,rgba(255,255,255,.20),rgba(255,255,255,.04)),var(--tint);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.34),inset 0 -1px 0 rgba(0,0,0,.35),0 8px 18px rgba(0,0,0,.4),0 0 0 .5px rgba(255,255,255,.10)}
+html[data-theme="dark"] .gbtn::after{background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0))}
+html[data-theme="dark"] .gbtn.redsoft{--tint:rgba(255,69,58,.22);color:#FF6B5F}
+.ctx-list button.danger{color:#FF3B30}
+
+/* halaman moderasi */
+.mod-head{display:flex;align-items:center;gap:10px;margin:2px 4px 14px;font-size:24px;font-weight:800;color:var(--text);letter-spacing:-.3px}
+.mod-head .ic{width:26px;height:26px;color:var(--blue)}
+.glass-seg{position:relative;display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:999px;margin-bottom:16px;
+  background:var(--glass-fill);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);box-shadow:var(--glass-shadow);border:1px solid rgba(255,255,255,.7)}
+html[data-theme="dark"] .glass-seg{border-color:rgba(255,255,255,.13)}
+.glass-seg button{position:relative;z-index:2;height:38px;border:0;background:transparent;font-family:inherit;font-size:14px;font-weight:700;color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:color .25s}
+.glass-seg button.on{color:var(--blue)}
+.glass-seg button b{min-width:20px;height:20px;padding:0 6px;border-radius:10px;display:grid;place-items:center;font-size:11.5px;color:#fff;background:#8E8E93}
+.glass-seg button.on b{background:var(--blue)}
+.glass-seg button b.alert{background:#FF3B30}
+.seg-pill{position:absolute;z-index:1;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;transition:transform .42s cubic-bezier(.3,1.35,.5,1);
+  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(228,238,255,.92));box-shadow:0 4px 12px rgba(31,111,235,.2),inset 0 1px 0 #fff}
+html[data-theme="dark"] .seg-pill{background:linear-gradient(180deg,rgba(104,116,142,.95),rgba(62,71,94,.97));box-shadow:0 4px 12px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.3)}
+.glass-seg[data-pos="1"] .seg-pill{transform:translateX(100%)}
+
+.mod-list{display:flex;flex-direction:column;gap:14px;padding-bottom:30px}
+.mod-card{position:relative;padding:14px;border-radius:26px;overflow:hidden;
+  background:linear-gradient(145deg,rgba(255,255,255,.82),rgba(255,255,255,.55));border:1px solid rgba(255,255,255,.85);
+  box-shadow:0 14px 34px rgba(15,23,42,.10),inset 0 1px 0 #fff;animation:modIn .4s cubic-bezier(.2,.9,.3,1) both}
+html[data-theme="dark"] .mod-card{background:linear-gradient(145deg,rgba(52,58,76,.78),rgba(28,32,44,.72));border-color:rgba(255,255,255,.12);box-shadow:0 14px 34px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.14)}
+@keyframes modIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.mod-card.keluar{animation:modOut .35s ease forwards}
+@keyframes modOut{to{opacity:0;transform:translateX(40px) scale(.96);max-height:0;margin:0;padding:0}}
+.mod-top{display:flex;gap:13px}
+.mod-cover{width:64px;height:88px;border-radius:16px;object-fit:cover;flex:none;background:#dbe4f3;box-shadow:0 8px 18px rgba(15,23,42,.18)}
+.mod-info{min-width:0;flex:1}
+.mod-title{font-size:16.5px;font-weight:800;line-height:1.25;color:var(--text);margin:0 0 3px;overflow-wrap:anywhere}
+.mod-meta{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.mod-meta span{display:inline-flex;align-items:center;gap:4px}
+.mod-meta .ic{width:13px;height:13px}
+.mod-syn{margin:10px 0 0;font-size:13px;line-height:1.5;color:var(--text-2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.mod-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.mod-chip{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 11px;border-radius:999px;font-size:12px;font-weight:700;color:var(--text-2);background:rgba(120,120,128,.14)}
+.mod-chip.hot{color:#fff;background:linear-gradient(180deg,#FF6B5F,#FF3B30)}
+.mod-note{margin-top:10px;padding:10px 12px;border-radius:14px;font-size:12.5px;line-height:1.45;color:var(--text-2);background:rgba(120,120,128,.10);overflow-wrap:anywhere}
+.mod-note b{color:var(--text)}
+.mod-act{display:flex;gap:9px;margin-top:14px}
+.mod-act .gbtn{flex:1;padding:0 10px}
+.mod-empty{display:flex;flex-direction:column;align-items:center;gap:10px;padding:46px 20px;text-align:center;color:var(--muted);font-size:14px}
+.mod-empty .ic{width:46px;height:46px;color:var(--green-2);stroke-width:1.6}
+.status-pill{position:absolute;left:8px;bottom:8px;z-index:3;padding:4px 10px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:.2px;color:#fff;background:#8E8E93;box-shadow:0 3px 8px rgba(0,0,0,.3)}
+.status-pill.pending{background:linear-gradient(180deg,#FFB340,#FF9500)}
+.status-pill.rejected{background:linear-gradient(180deg,#FF6B5F,#FF3B30)}
+.status-pill.hidden{background:#636366}
+.status-note{font-size:10.5px;color:#FF3B30;margin:2px 0 4px;line-height:1.35}
+
+/* sheet laporan */
+.rp-title{font-size:20px;font-weight:800;text-align:center;margin:0 0 4px}
+.rp-sub{font-size:13px;text-align:center;color:#64748b;margin:0 0 14px;padding:0 12px;overflow-wrap:anywhere}
+.rp-group{border-radius:20px;overflow:hidden;background:rgba(255,255,255,.7);border:.5px solid rgba(60,60,67,.14);margin-bottom:12px;max-height:38vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.rp-row{display:flex;align-items:center;gap:12px;width:100%;padding:13px 16px;border:0;background:transparent;font-family:inherit;font-size:15.5px;color:inherit;text-align:left;cursor:pointer}
+.rp-row+.rp-row{border-top:.5px solid rgba(60,60,67,.16)}
+.rp-row .ic{color:#0a84ff}
+.rp-row.hak_cipta .ic{color:#FF3B30}
+.rp-row span{flex:1}
+.rp-row .tick{width:22px;height:22px;border-radius:50%;border:2px solid rgba(120,120,128,.45);display:grid;place-items:center;transition:all .2s}
+.rp-row.on .tick{background:#0a84ff;border-color:#0a84ff}
+.rp-row.on .tick::after{content:"";width:6px;height:10px;border:solid #fff;border-width:0 2.4px 2.4px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.rp-field{display:none;margin-bottom:12px}
+.rp-field.show{display:block}
+.rp-field textarea,.rp-field input{width:100%;padding:13px 15px;border:0;border-radius:16px;font-family:inherit;font-size:15px;color:inherit;background:rgba(120,120,128,.14);outline:none;resize:none}
+.rp-field textarea{min-height:76px}
+.rp-hint{font-size:12px;color:#64748b;margin:6px 6px 0}
+.rp-btns{display:flex;gap:10px}
+.rp-btns .gbtn{flex:1;height:48px;font-size:16px}
+html[data-theme="dark"] .rp-sub,html[data-theme="dark"] .rp-hint{color:#9aa3b5}
+html[data-theme="dark"] .rp-group{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.1)}
+html[data-theme="dark"] .rp-row+.rp-row{border-top-color:rgba(255,255,255,.1)}
+html[data-theme="dark"] .rp-row .ic{color:#4C9AFF}
+html[data-theme="dark"] .rp-row.hak_cipta .ic{color:#FF6B5F}
+html[data-theme="dark"] .rp-field textarea,html[data-theme="dark"] .rp-field input{background:rgba(255,255,255,.09)}
+.chip-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.chip-row button{height:32px;padding:0 13px;border:0;border-radius:999px;font-family:inherit;font-size:13px;font-weight:600;color:var(--text-2);background:rgba(120,120,128,.15);cursor:pointer}
+
+
+/* =====================================================================
+   V13 - KOMIK, PROSEDUR, TAMBAH BAB, TAMAT
+   ===================================================================== */
+/* ---- form unggah ---- */
+.up-note{font-size:12px;line-height:1.5;color:var(--muted);margin:-4px 2px 12px}
+.up-chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;font-size:12px;font-weight:700;color:var(--blue);background:var(--blue-soft)}
+.tamat-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;margin:6px 0 14px;border-radius:18px;background:rgba(120,120,128,.12);cursor:pointer}
+.tamat-row b{display:block;font-size:14.5px;color:var(--text)}
+.tamat-row small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+#boxKomik{margin-bottom:12px}
+.kb-card{position:relative;padding:12px;margin-bottom:12px;border-radius:20px;background:rgba(120,120,128,.10);border:1px solid var(--line)}
+.kb-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-size:13.5px;color:var(--text)}
+.kb-del{width:30px;height:30px;border:0;border-radius:50%;background:rgba(255,69,58,.14);color:#FF3B30;font-size:13px;cursor:pointer}
+.kb-drop{display:flex;align-items:center;justify-content:center;min-height:120px;border-radius:16px;overflow:hidden;cursor:pointer;color:var(--blue);font-weight:700;font-size:14px;
+  background:var(--blue-soft);border:2px dashed var(--blue-2)}
+.kb-drop img{width:100%;max-height:260px;object-fit:contain;display:block;background:#111}
+.kb-info{font-size:11.5px;color:var(--muted);margin:6px 2px 8px;min-height:14px}
+.kb-card textarea{width:100%;min-height:74px;padding:12px 14px;border:0;border-radius:14px;font-family:inherit;font-size:14.5px;color:var(--text);background:rgba(120,120,128,.14);outline:none;resize:vertical}
+.kb-add{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:4px 0 6px}
+.kb-total{font-size:12px;color:var(--muted)}
+#kbPreview{margin-top:12px;padding:10px;border-radius:20px;background:#fffaf0;display:none}
+#kbPreview.show{display:block}
+
+/* ---- baca: komik ---- */
+#textContentContainer.reader-content[data-kat="komik"]{padding:14px 10px 22px;max-width:720px;
+  background-color:#fffaf0;background-image:radial-gradient(rgba(0,0,0,.07) 1px,transparent 1.2px);background-size:9px 9px;color:#111;font-family:'Comic Neue','Comic Sans MS','Chalkboard SE',system-ui,sans-serif}
+#textContentContainer[data-kat="komik"] .akhir-bab{color:#111}
+.komik-halaman{display:flex;flex-direction:column;gap:12px}
+.kr{display:flex;gap:6px;align-items:flex-start}
+.kr-1 .kp{flex:1 1 100%}
+.kr-2 .kp:first-child{flex:1.22 1 0}
+.kr-2 .kp:last-child{flex:1 1 0}
+.kr-2.flip .kp:first-child{flex:1 1 0}
+.kr-2.flip .kp:last-child{flex:1.22 1 0}
+.kr-3 .kp{flex:1 1 0}
+.kp{position:relative;margin:0;min-width:0;display:flex;flex-direction:column}
+.kp-shape{position:relative;background:#111;clip-path:var(--clip);width:100%}
+.kp-shape img{position:absolute;left:3px;top:3px;width:calc(100% - 6px);height:calc(100% - 6px);object-fit:cover;clip-path:var(--clip);background:#e8e8e8;display:block}
+.kp-wide .kp-shape{aspect-ratio:16/10;--clip:polygon(0 0,100% 0,100% 100%,0 100%)}
+.kp-slant .kp-shape{aspect-ratio:4/3;--clip:polygon(0 0,100% 0,100% 90%,0 100%)}
+.kr-2 .kp .kp-shape{aspect-ratio:1/1.08}
+.kr-2 .kp:first-child .kp-shape{--clip:polygon(0 0,100% 0,92% 100%,0 100%)}
+.kr-2 .kp:last-child .kp-shape{--clip:polygon(8% 0,100% 0,100% 100%,0 100%)}
+.kr-3 .kp .kp-shape{aspect-ratio:3/4.2;--clip:polygon(9% 0,100% 0,91% 100%,0 100%)}
+.kp-bubble{margin:0;padding:9px 13px;border:2.5px solid #111;border-radius:18px;background:#fff;color:#111;white-space:pre-line;overflow-wrap:anywhere;
+  font-weight:700;font-size:15px;line-height:1.38;letter-spacing:0;box-shadow:3px 3px 0 #111;position:relative;-webkit-font-smoothing:antialiased}
+.kp-bubble::after{content:"";position:absolute;bottom:-11px;width:14px;height:14px;background:#fff;border-right:2.5px solid #111;border-bottom:2.5px solid #111;transform:rotate(45deg)}
+.kp-bubble.l::after{left:22px}
+.kp-bubble.r::after{right:22px}
+.kp-bubble.over{position:absolute;bottom:18px;max-width:82%;z-index:2}
+.kp-bubble.over.l{left:10px}
+.kp-bubble.over.r{right:10px}
+.kp-bubble.under{margin-top:16px}
+.kr-3 .kp-bubble{font-size:13px;padding:7px 9px;border-radius:14px}
+.kp-narasi{padding:11px 15px;border:2.5px solid #111;background:#ffe27a;color:#111;font-weight:800;font-size:15px;line-height:1.4;white-space:pre-line;overflow-wrap:anywhere;box-shadow:3px 3px 0 #111;border-radius:6px;font-family:inherit}
+
+/* ---- baca: prosedur (langkah demi langkah) ---- */
+#textContentContainer.reader-content[data-kat="prosedur"]{padding:22px 16px 30px;font-family:'Inter','Segoe UI',system-ui,sans-serif;font-size:16px;line-height:1.7;background:var(--surface);color:var(--text)}
+.pr-intro{padding:14px 16px;margin-bottom:16px;border-radius:18px;background:var(--blue-soft);color:var(--text);font-size:15px;line-height:1.65}
+.pr-steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.pr-steps li{position:relative;display:flex;gap:14px;padding:0 0 18px 0}
+.pr-steps li:not(:last-child)::before{content:"";position:absolute;left:18px;top:40px;bottom:2px;width:2px;background:linear-gradient(180deg,var(--blue-2),transparent);opacity:.45}
+.pr-n{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:16px;color:#fff;background:linear-gradient(180deg,var(--blue-2),var(--blue));box-shadow:0 6px 14px rgba(31,111,235,.35)}
+.pr-body{flex:1;min-width:0;padding:10px 14px;border-radius:16px;background:rgba(120,120,128,.10);overflow-wrap:anywhere}
+.pr-body p{margin:0 0 6px}
+.pr-body p:last-child{margin:0}
+.pr-note{margin-top:8px;padding:9px 12px;border-radius:12px;font-size:14px;background:rgba(255,159,10,.15);color:var(--text)}
+.pr-note b{color:#FF9500}
+#textContentContainer[data-kat="prosedur"] .akhir-bab{margin-top:8px}
+
+/* ---- akhir bab: selesai / tamat ---- */
+.akhir-aksi{max-width:680px;margin:18px auto 0;display:flex;flex-direction:column;gap:10px;align-items:stretch}
+.tamat-kartu{padding:22px 18px;border-radius:26px;text-align:center;color:#fff;background:linear-gradient(135deg,#7c3aed,#d946ef 55%,#f59e0b);box-shadow:0 16px 36px rgba(124,58,237,.4)}
+.tamat-kartu h3{margin:0 0 4px;font-size:26px;letter-spacing:4px;font-weight:900}
+.tamat-kartu p{margin:0 0 14px;font-size:13.5px;opacity:.95}
+.tamat-kartu .gbtn{--tint:rgba(255,255,255,.28);color:#fff}
+.akhir-info{text-align:center;font-size:13px;color:var(--muted);padding:4px 0}
+#textContentContainer[data-kat="prosedur"] p,#textContentContainer[data-kat="komik"] p{text-indent:0;text-align:left;margin:0 0 6px;hyphens:none;-webkit-hyphens:none}
+#textContentContainer[data-kat="prosedur"] p::first-letter,#textContentContainer[data-kat="komik"] p::first-letter{float:none;font-size:inherit;line-height:inherit;font-weight:inherit;padding:0;color:inherit}
+
     </style>
 </head>
 <body data-page="beranda">
@@ -1183,9 +1372,6 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             <a class="menu-item" role="button" onclick="filterKategori('Novel')"><span class="menu-label">Novel</span></a>
             <a class="menu-item" role="button" onclick="filterKategori('Komik')"><span class="menu-label">Komik</span></a>
             <a class="menu-item" role="button" onclick="filterKategori('Cerpen')"><span class="menu-label">Cerpen</span></a>
-            <a class="menu-item" role="button" onclick="filterKategori('Berita')"><span class="menu-label">Berita</span></a>
-            <a class="menu-item" role="button" onclick="filterKategori('Majalah')"><span class="menu-label">Majalah</span></a>
-            <a class="menu-item" role="button" onclick="filterKategori('Narasi')"><span class="menu-label">Narasi</span></a>
             <a class="menu-item" role="button" onclick="filterKategori('Prosedur')"><span class="menu-label">Prosedur</span></a>
         </div>
 
@@ -1241,6 +1427,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             <h2 id="detail-title" class="dv-title">Judul Novel</h2>
             <div id="detail-author" class="dv-author" onclick="bukaProfilKreatorDariDetail()">Oleh: Penulis</div>
             <button type="button" id="btnFollowDetail" class="btn-follow-detail" onclick="toggleFollowDetail()"></button>
+            <button type="button" class="gbtn redsoft sm" style="margin-top:8px" onclick="bukaLaporan()"><svg class="ic sm" aria-hidden="true"><use href="#i-flag"/></svg>Laporkan</button>
 
             <div class="dv-tags">
                 <span id="detail-category" class="dv-tag">Kategori</span>
@@ -1348,6 +1535,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             Memuat isi teks cerita...
         </div>
 
+        <div id="akhirBab"></div>
         <div class="reader-controls">
             <button onclick="pindahBab(-1)"><i class="fas fa-chevron-left"></i> Sebelumnya</button>
             <button onclick="pindahBab(1)">Selanjutnya <i class="fas fa-chevron-right"></i></button>
@@ -1364,7 +1552,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
                 <span class="av-sparks" aria-hidden="true"><b style="--a:0deg;--d:0.0s"></b><b style="--a:60deg;--d:0.4s"></b><b style="--a:120deg;--d:0.9s"></b><b style="--a:180deg;--d:1.3s"></b><b style="--a:240deg;--d:1.7s"></b><b style="--a:300deg;--d:2.1s"></b></span>
             </div>
             <div class="profile-name">
-                <span id="donasi-name">Developer</span>
+                <span id="donasi-name">Memuat...</span>
                 <span id="donasi-badge" class="creator-badge" hidden></span>
             </div>
             <div class="profile-username" id="donasi-username"></div>
@@ -1382,6 +1570,17 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
         <div class="donor-list" id="donor-list"><div class="donor-empty">Memuat donatur...</div></div>
     </div>
 
+    <!-- ================= HALAMAN MODERASI (khusus admin) ================= -->
+    <div id="moderasi" class="container page-view">
+        <div class="mod-head"><svg class="ic" aria-hidden="true"><use href="#i-shield"/></svg> Moderasi</div>
+        <div class="glass-seg" id="modSeg" data-pos="0">
+            <span class="seg-pill"></span>
+            <button type="button" class="on" data-seg="antrean" onclick="ganti_segmen('antrean')">Menunggu <b id="cntAntrean">0</b></button>
+            <button type="button" data-seg="laporan" onclick="ganti_segmen('laporan')">Laporan <b id="cntLaporan">0</b></button>
+        </div>
+        <div class="mod-list" id="modList"></div>
+    </div>
+
     <!-- ================= 5. HALAMAN AKUN & PROFIL ================= -->
     <div id="akun" class="container page-view" style="padding-left: 0; padding-right: 0;">
         <div class="tiktok-profile">
@@ -1396,7 +1595,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
                 <button type="button" class="avatar-cam" onclick="pilihFotoProfil()" aria-label="Ganti foto profil"><i class="fas fa-camera"></i></button>
             </div>
             <div class="profile-name">
-                <span id="profile-page-name">Developer / Pemilik Web</span>
+                <span id="profile-page-name">Memuat...</span>
                 <!-- Label / Title Kreator / Admin -->
                 <span id="creator-title-badge" class="creator-badge" hidden></span>
             </div>
@@ -1472,44 +1671,51 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
     <div class="modal-overlay" id="modalUpload">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Unggah Karya Baru</h3>
+                <h3 id="judulModalUpload">Unggah Karya Baru</h3>
                 <i class="fas fa-times close-btn" onclick="tutupUpload()"></i>
             </div>
 
-            <div class="form-group">
-                <label>Metode Unggah</label>
-                <select id="inputMetode" onchange="gantiMetodeUpload()">
-                    <option value="pdf">File PDF (Ekstrak Teks Otomatis)</option>
-                    <option value="text">Input Teks / Salin Bab Direct</option>
-                </select>
+            <div class="glass-seg" id="upSeg" data-pos="0" style="margin-bottom:14px">
+                <span class="seg-pill"></span>
+                <button type="button" class="on" data-m="baru" onclick="setModeUpload('baru')">Karya Baru</button>
+                <button type="button" data-m="bab" onclick="setModeUpload('bab')">Tambah Bab</button>
             </div>
 
-            <div class="form-group">
-                <label>Judul Novel/Karya</label>
-                <input type="text" id="inputJudul" placeholder="Contoh: Bayangan Kota">
-            </div>
-            <div class="form-group">
-                <label>Nama Penulis (Kreator)</label>
-                <input type="text" id="inputPenulis" placeholder="Contoh: Rian A.">
-            </div>
-            
-            <div class="form-group">
-                <label>Sinopsis Singkat</label>
-                <textarea id="inputSinopsis" placeholder="Tulis sinopsis mengenai cerita ini..." style="min-height: 80px;"></textarea>
+            <div class="form-group" id="grpPilihKarya" style="display:none">
+                <label>Pilih Karya yang Mau Ditambah Bab</label>
+                <select id="selectKarya" onchange="pilihKaryaTambahBab()"></select>
+                <div class="input-hint" id="infoKarya"></div>
             </div>
 
-            <div class="form-group">
-                <label>Kategori</label>
-                <select id="inputKategori">
-                    <option value="Novel">Novel</option>
-                    <option value="Komik">Komik</option>
-                    <option value="Cerpen">Cerpen</option>
-                    <option value="Berita">Berita</option>
-                    <option value="Majalah">Majalah</option>
-                    <option value="Narasi">Narasi</option>
-                    <option value="Prosedur">Prosedur</option>
-                </select>
+            <div id="grpBaru">
+                <div class="form-group">
+                    <label>Judul Novel/Karya</label>
+                    <input type="text" id="inputJudul" placeholder="Contoh: Bayangan Kota">
+                </div>
+                <div class="form-group">
+                    <label>Nama Penulis (Kreator)</label>
+                    <input type="text" id="inputPenulis" placeholder="Contoh: Rian A.">
+                </div>
+                <div class="form-group">
+                    <label>Sinopsis Singkat</label>
+                    <textarea id="inputSinopsis" placeholder="Tulis sinopsis mengenai cerita ini..." style="min-height: 80px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Kategori</label>
+                    <select id="inputKategori" onchange="aturTampilanUpload()">
+                        <option value="Novel">Novel</option>
+                        <option value="Komik">Komik</option>
+                        <option value="Cerpen">Cerpen</option>
+                        <option value="Prosedur">Prosedur</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Unggah Gambar Cover / Thumbnail (Pilihan)</label>
+                    <input type="file" id="imageInput" accept="image/*">
+                </div>
+                <div class="up-note" id="noteModerasi" style="display:none">Karya baru akan diperiksa admin dulu sebelum tayang.</div>
             </div>
+
             <div class="form-group">
                 <label>Nomor Bab / Episode</label>
                 <input type="number" id="inputNomorBab" value="1" min="1">
@@ -1519,24 +1725,43 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
                 <input type="text" id="inputJudulBab" placeholder="Contoh: Bab 1 - Pertemuan Pertama">
             </div>
 
-            <div class="form-group">
-                <label>Unggah Gambar Cover / Thumbnail (Pilihan)</label>
-                <input type="file" id="imageInput" accept="image/*">
-            </div>
-
-            <div id="containerMetodePDF">
-                <div class="upload-area" onclick="document.getElementById('pdfInput').click()">
-                    <i class="fas fa-file-pdf"></i>
-                    <p>Klik di sini untuk memilih file **PDF**</p>
-                    <input type="file" id="pdfInput" accept="application/pdf" style="display: none;">
-                </div>
-            </div>
-
-            <div id="containerMetodeTeks" style="display: none;">
+            <div id="grpTeks">
                 <div class="form-group">
-                    <label>Isi Teks Cerita / Bab</label>
-                    <textarea id="inputTextContent" placeholder="Ketik atau tempel seluruh bab cerita Anda di sini..."></textarea>
+                    <label>Metode Unggah</label>
+                    <select id="inputMetode" onchange="gantiMetodeUpload()">
+                        <option value="pdf">File PDF (Ekstrak Teks Otomatis)</option>
+                        <option value="text">Input Teks / Salin Bab Direct</option>
+                    </select>
                 </div>
+                <div id="containerMetodePDF">
+                    <div class="upload-area" onclick="document.getElementById('pdfInput').click()">
+                        <i class="fas fa-file-pdf"></i>
+                        <p>Klik di sini untuk memilih file **PDF**</p>
+                        <input type="file" id="pdfInput" accept="application/pdf" style="display: none;">
+                    </div>
+                </div>
+                <div id="containerMetodeTeks" style="display: none;">
+                    <div class="form-group">
+                        <label>Isi Teks Cerita / Bab</label>
+                        <textarea id="inputTextContent" placeholder="Ketik atau tempel seluruh bab cerita Anda di sini..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div id="boxKomik" style="display:none">
+                <div class="up-note">Tiap panel = satu gambar + dialognya. Tata letak komik (persegi, lebar, jajar genjang) dibuat <b>otomatis</b>. Tulis dialog di kolom teks, bukan di dalam gambar, supaya tetap tajam dan mudah dibaca. Gambar dikompres otomatis.</div>
+                <div id="kbList"></div>
+                <div class="kb-add">
+                    <button type="button" class="gbtn sm" onclick="tambahPanel()">＋ Panel</button>
+                    <button type="button" class="gbtn sm blue" onclick="pratinjauKomik()">Pratinjau Layout</button>
+                    <span class="kb-total" id="kbTotal"></span>
+                </div>
+                <div id="kbPreview"></div>
+            </div>
+
+            <div class="tamat-row" onclick="toggleTamat()">
+                <div><b>Tandai karya TAMAT</b><small>Aktifkan di bab terakhir. Pembaca melihat lencana TAMAT.</small></div>
+                <span class="ios-switch" id="swTamat"></span>
             </div>
 
             <canvas id="pdfCanvas" style="display: none;"></canvas>
@@ -1564,7 +1789,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             </div>
             <div class="form-group">
                 <label>Nama Tampilan</label>
-                <input type="text" id="editInputNama" maxlength="30" value="Developer / Pemilik Web">
+                <input type="text" id="editInputNama" maxlength="30" value="">
             </div>
             <div class="form-group">
                 <label>Username (untuk login)</label>
@@ -1596,6 +1821,61 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
         </div>
     </div>
 
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+        <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5.2c0 4.4-2.9 8-7 9.8-4.1-1.8-7-5.4-7-9.8V6l7-3z"/><path d="M9 12l2.2 2.2L15.5 10"/></symbol>
+        <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.2 12.4l2.6 2.6 5-5.4"/></symbol>
+        <symbol id="i-x-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></symbol>
+        <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5.5 21V4"/><path d="M5.5 4.5h11.2l-2.2 3.8 2.2 3.8H5.5"/></symbol>
+        <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+        <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 6A9.8 9.8 0 0 1 12 5.5C18 5.5 21.5 12 21.5 12a17 17 0 0 1-3.2 4"/><path d="M6.4 7.6A16.6 16.6 0 0 0 2.5 12S6 18.5 12 18.5c1.5 0 2.8-.4 4-.9"/></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.2 1.8"/></symbol>
+        <symbol id="i-doc" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></symbol>
+        <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.5 20c.9-3.6 3.9-5.4 7.5-5.4s6.6 1.8 7.5 5.4"/></symbol>
+        <symbol id="i-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.7 5.7l12.6 12.6"/></symbol>
+        <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5l9.5 16.5h-19L12 3.5z"/><path d="M12 10v4.2M12 17.2h.01"/></symbol>
+        <symbol id="i-copyright" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M14.8 9.6a3.6 3.6 0 1 0 0 4.8"/></symbol>
+    </defs></svg>
+    <!-- ================= LAPORKAN KARYA ================= -->
+    <div class="ios-sheet-ov" id="reportSheet" onclick="if(event.target===this)tutupLaporan()">
+        <div class="ios-sheet">
+            <div class="grab"></div>
+            <h3 class="rp-title">Laporkan Karya</h3>
+            <p class="rp-sub" id="rpJudul"></p>
+            <div class="rp-group" id="rpList"></div>
+            <div class="rp-field" id="rpSumber">
+                <input type="text" id="rpUrl" maxlength="300" placeholder="Link karya asli (jika ada)" inputmode="url" autocapitalize="none">
+                <div class="rp-hint">Sertakan tautan atau nama pemilik karya asli supaya laporan cepat diperiksa.</div>
+            </div>
+            <div class="rp-field show">
+                <textarea id="rpDetail" maxlength="400" placeholder="Jelaskan singkat (opsional)"></textarea>
+            </div>
+            <div class="rp-btns">
+                <button type="button" class="gbtn" onclick="tutupLaporan()">Batal</button>
+                <button type="button" class="gbtn red" id="rpKirim" onclick="kirimLaporan()">Kirim Laporan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= TOLAK KARYA ================= -->
+    <div class="ios-sheet-ov" id="rejectSheet" onclick="if(event.target===this)tutupTolak()">
+        <div class="ios-sheet">
+            <div class="grab"></div>
+            <h3 class="rp-title">Tolak Karya</h3>
+            <p class="rp-sub">Alasan akan terlihat oleh pengunggah.</p>
+            <div class="chip-row">
+                <button type="button" onclick="isiAlasanTolak('Diduga melanggar hak cipta')">Hak cipta</button>
+                <button type="button" onclick="isiAlasanTolak('Konten tidak pantas')">Tidak pantas</button>
+                <button type="button" onclick="isiAlasanTolak('Spam atau tidak lengkap')">Spam / tidak lengkap</button>
+                <button type="button" onclick="isiAlasanTolak('Karya duplikat')">Duplikat</button>
+            </div>
+            <div class="rp-field show"><textarea id="tolakAlasan" maxlength="300" placeholder="Tulis alasan penolakan (opsional)"></textarea></div>
+            <div class="rp-btns">
+                <button type="button" class="gbtn" onclick="tutupTolak()">Batal</button>
+                <button type="button" class="gbtn red" onclick="kirimTolak()">Tolak Karya</button>
+            </div>
+        </div>
+    </div>
+
     <input type="file" id="ppInput" accept="image/*" hidden>
 
     <!-- ================= MENU KONTEKS KARYA (tekan lama) ================= -->
@@ -1606,6 +1886,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
                 <button type="button" data-aksi="share" onclick="aksiKonteks('share')"><span>Bagikan</span><i class="fas fa-arrow-up-from-bracket"></i></button>
                 <button type="button" data-aksi="fav" onclick="aksiKonteks('fav')"><span>Favorit</span><i class="far fa-heart"></i></button>
                 <button type="button" data-aksi="ulasan" onclick="aksiKonteks('ulasan')"><span>Lihat Ulasan</span><i class="far fa-message"></i></button>
+                <button type="button" class="danger" data-aksi="lapor" onclick="aksiKonteks('lapor')"><span>Laporkan</span><i class="far fa-flag"></i></button>
             </div>
         </div>
     </div>
@@ -1688,6 +1969,9 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
         <a class="nav-item" data-nav="donasi" role="button" tabindex="0">
             <i class="fas fa-hand-holding-heart"></i><span class="nav-text">Donasi</span>
         </a>
+        <a class="nav-item" data-nav="moderasi" role="button" tabindex="0" hidden>
+            <i class="fas fa-shield-halved"></i><span class="nav-text">Moderasi</span><b class="nav-badge" hidden>0</b>
+        </a>
         <a class="nav-item" data-nav="profile" role="button" tabindex="0">
             <i class="fas fa-user"></i><span class="nav-text">Profil</span>
         </a>
@@ -1701,6 +1985,15 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
 
         // >>> GANTI dengan alamat halaman login/daftar milikmu (satu domain dengan web ini supaya sesinya terbawa)
         const LOGIN_URL = "login.html";
+
+        // Moderasi aktif otomatis kalau kolom "status" sudah ada di database (setelah supabase_moderasi.sql dijalankan)
+        let MODERASI_AKTIF = false;
+        const moderasiSiap = (async function () {
+            try { const { error } = await _supabase.from('novels').select('status,is_hidden').limit(1); MODERASI_AKTIF = !error; }
+            catch (e) { MODERASI_AKTIF = false; }
+        })();
+        function saring(q) { return MODERASI_AKTIF ? q.eq('status', 'approved').eq('is_hidden', false) : q; }
+        const lolosPublik = n => !MODERASI_AKTIF || (n.status === 'approved' && !n.is_hidden);
 
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
@@ -1859,7 +2152,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             }
         }
 
-        const NAV_MAP = { 'beranda': 'home', 'halaman-kategori': 'home', 'cari': 'cari', 'donasi': 'donasi', 'akun': 'profile' };
+        const NAV_MAP = { 'beranda': 'home', 'halaman-kategori': 'home', 'cari': 'cari', 'donasi': 'donasi', 'moderasi': 'moderasi', 'akun': 'profile' };
         function bukaHalaman(idHalaman, elemenTombol) {
             const targetPage = document.getElementById(idHalaman);
             if (!targetPage) return;
@@ -1871,6 +2164,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
 
             targetPage.classList.add('active-page');
             if (idHalaman === 'donasi' && typeof muatHalamanDonasi === 'function') muatHalamanDonasi();
+            if (idHalaman === 'moderasi' && typeof muatModerasi === 'function') muatModerasi();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -1956,9 +2250,10 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             }
             return c;
         }
-        function canvasKeBlob(c, q) { return new Promise(r => c.toBlob(b => r(b), 'image/jpeg', q)); }
+        function canvasKeBlob(c, q, mime) { return new Promise(r => c.toBlob(b => r(b), mime || 'image/jpeg', q)); }
         async function optimasiGambar(file, opt) {
-            opt = Object.assign({ maxSide: 900, maxBytes: 230 * 1024, q: 0.88, minQ: 0.6, square: false }, opt || {});
+            opt = Object.assign({ maxSide: 900, maxBytes: 230 * 1024, q: 0.88, minQ: 0.6, square: false, webp: false, maxWidth: 0 }, opt || {});
+                const mime = (opt.webp && dukungWebp) ? 'image/webp' : 'image/jpeg';
             try {
                 if (file.__opt && !opt.force) return file;
                 const bmp = await bukaBitmap(file);
@@ -1966,12 +2261,13 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
                 let sx = 0, sy = 0, sw = bw, sh = bh;
                 if (opt.square) { const s = Math.min(bw, bh); sx = Math.round((bw - s) / 2); sy = Math.round((bh - s) / 2); sw = sh = s; }
                 let scale = Math.min(1, opt.maxSide / Math.max(sw, sh));
+                if (opt.maxWidth) scale = Math.min(scale, opt.maxWidth / sw);
                 let best = null;
                 for (let round = 0; round < 4; round++) {
                     const tw = Math.max(1, Math.round(sw * scale)), th = Math.max(1, Math.round(sh * scale));
                     const c = gambarKeCanvas(bmp, sx, sy, sw, sh, tw, th);
                     for (let q = opt.q; q >= opt.minQ - 0.001; q -= 0.06) {
-                        const b = await canvasKeBlob(c, q);
+                        const b = await canvasKeBlob(c, q, mime);
                         if (!b) continue;
                         best = b;
                         if (b.size <= opt.maxBytes) { best.__opt = true; if (bmp.close) bmp.close(); return best; }
@@ -2010,6 +2306,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             }
         }
         function resetFormUnggahBab() {
+            if (typeof resetKomikForm === 'function') resetKomikForm();
             ['inputJudulBab', 'inputTextContent'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
             const nb = document.getElementById('inputNomorBab'); if (nb) nb.value = (parseInt(nb.value) || 0) + 1;
             ['imageInput', 'pdfInput'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
@@ -2065,6 +2362,18 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
         }
 
         async function loadRatingSummary() {
+            // ringan: rata-rata sudah tersimpan di tabel novels (kolom rating_avg / rating_count)
+            try {
+                const { data, error } = await _supabase.from('novels').select('id,rating_avg,rating_count').gt('rating_count', 0);
+                if (error) throw error;
+                const peta = {};
+                (data || []).forEach(function (r) { peta[String(r.id)] = { avg: Number(r.rating_avg) || 0, count: r.rating_count || 0, dist: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 } }; });
+                ratingSummary = peta;
+                return;
+            } catch (e) { /* kolom belum ada -> hitung dari semua ulasan seperti sebelumnya */ }
+            return loadRatingSummaryLama();
+        }
+        async function loadRatingSummaryLama() {
             const rows = await fetchReviews();
             const byNovel = {};
             rows.forEach(r => { (byNovel[r.novel_id] = byNovel[r.novel_id] || []).push(r); });
@@ -2142,7 +2451,9 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             const rows = await fetchReviews(novelId);
             if (String(activeNovelId) !== String(novelId)) return;
             renderUlasan(novelId, rows);
-            const mine = rows.find(r => r.user_identifier === getDeviceId());
+            const idSaya = currentUser ? currentUser.id : null;
+            const mine = idSaya ? rows.find(r => r.user_identifier === idSaya) : null;
+            if (!currentUser) document.getElementById('rv-hint').innerText = 'Masuk dulu untuk memberi rating. 1 akun = 1 rating per karya.';
             if (mine) {
                 rvDraft = Number(mine.rating); setBintangInput(rvDraft);
                 document.getElementById('rv-text').value = mine.content || '';
@@ -2155,10 +2466,11 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
         async function kirimUlasan() {
             if (!activeNovelId) return;
             if (rvDraft < 1) { showToast('Pilih bintang dulu ya', 'error'); return; }
+            if (!wajibLogin('Masuk dulu untuk memberi rating')) return;
             const row = {
                 novel_id: String(activeNovelId),
-                user_identifier: getDeviceId(),
-                user_name: currentUser ? userProfile.nama : 'Pembaca',
+                user_identifier: currentUser.id,
+                user_name: userProfile.nama,
                 rating: rvDraft,
                 content: document.getElementById('rv-text').value.trim().slice(0, 500),
                 created_at: new Date().toISOString()
@@ -2170,8 +2482,13 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
                     if (error) throw error;
                     saved = true;
                 } catch (e) {
+                    const msg = (e && e.message) || '';
+                    if (/sendiri|Masuk dulu|row-level|duplicate|violates/i.test(msg)) {
+                        showToast(/sendiri/i.test(msg) ? 'Kamu tidak bisa menilai karyamu sendiri' : 'Gagal mengirim ulasan: ' + msg, 'error');
+                        return;
+                    }
                     reviewsRemoteOk = false;
-                    console.warn('Gagal simpan ke Supabase, pakai lokal:', e && e.message);
+                    console.warn('Gagal simpan ke Supabase, pakai lokal:', msg);
                 }
             }
             if (!saved) {
@@ -2184,7 +2501,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
 
         async function hapusUlasanSaya() {
             if (!activeNovelId) return;
-            const nid = String(activeNovelId), uid = getDeviceId();
+            const nid = String(activeNovelId), uid = currentUser ? currentUser.id : getDeviceId();
             if (reviewsRemoteOk) {
                 try {
                     const { error } = await _supabase.from('reviews').delete().eq('novel_id', nid).eq('user_identifier', uid);
@@ -2204,11 +2521,12 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             const lens = document.getElementById('navLens');
             const inner = document.getElementById('lensInner');
             if (!nav || !lens || !inner) return null;
-            const items = Array.from(nav.querySelectorAll(':scope > .nav-item'));
+            const semua = Array.from(nav.querySelectorAll(':scope > .nav-item'));
+            let items = semua.slice();
             const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
             const PANJANG = 1.5;
 
-            items.forEach(it => {
+            semua.forEach(it => {
                 const c = it.cloneNode(true);
                 ['data-nav', 'role', 'tabindex'].forEach(a => c.removeAttribute(a));
                 c.classList.remove('active');
@@ -2220,6 +2538,9 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             const idxOf = k => items.findIndex(i => i.dataset.nav === k);
 
             function measure() {
+                items = semua.filter(i => !i.hidden);
+                nav.style.setProperty('--cols', items.length);
+                inner.style.setProperty('--cols', items.length);
                 const r = nav.getBoundingClientRect();
                 if (!r.width) return false;
                 xs = items.map(i => i.getBoundingClientRect().left - r.left - nav.clientLeft);
@@ -2297,6 +2618,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
                     if (!moved) setTimeout(() => { const si = document.getElementById('searchInput'); if (si) si.focus(); }, 220);
                 }
                 else if (key === 'donasi') bukaHalaman('donasi', el);
+                else if (key === 'moderasi') bukaHalaman('moderasi', el);
                 else if (key === 'profile') navAkun(el, 'tab-karya');
             }
             function activate(idx, moved) {
@@ -2358,7 +2680,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             }
             function setActive(key) {
                 S.key = key;
-                items.forEach(i => i.classList.toggle('active', i.dataset.nav === key));
+                semua.forEach(i => i.classList.toggle('active', i.dataset.nav === key));
                 if (!ready || S.drag || S.peek) return;
                 const i = idxOf(key); if (i < 0) return;
                 S.t = xs[i]; kick();
@@ -2392,7 +2714,14 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
                     peek(getComputedStyle(modalUp).display !== 'none');
                 }).observe(modalUp, { attributes: true, attributeFilter: ['style'] });
             }
-            return { setActive: setActive, refresh: init };
+            function setVisible(key, on) {
+                const i = semua.findIndex(x => x.dataset.nav === key); if (i < 0) return;
+                if (semua[i].hidden === !on) return;
+                semua[i].hidden = !on;
+                if (inner.children[i]) inner.children[i].hidden = !on;
+                init();
+            }
+            return { setActive: setActive, refresh: init, setVisible: setVisible };
         })();
 
         // ====== Helper gaya iOS ======
@@ -2463,6 +2792,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             if (!wajibLogin('Masuk dulu untuk mengunggah karya')) return;
             const p = document.getElementById('inputPenulis');
             if (p) { p.value = userProfile.nama; p.readOnly = true; p.classList.add('input-terkunci'); }
+            if (typeof aturTampilanUpload === 'function') aturTampilanUpload();
             document.getElementById('modalUpload').style.display = 'flex';
         }
         function tutupUpload() { document.getElementById('modalUpload').style.display = 'none'; }
@@ -2483,7 +2813,18 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             const { data, error } = await _supabase.from('profiles')
                 .select('id,username,display_name,bio,avatar_url,is_admin,followers_count').eq('id', currentUser.id).maybeSingle();
             if (error) console.warn('Gagal memuat profil:', error.message);
-            const p = data || {};
+            let p = data;
+            if (!p) {
+                // akun sudah login tapi profilnya belum ada -> web membuatkannya sendiri (username = bagian depan email)
+                const dasar0 = (currentUser.email || 'kreator').split('@')[0].toLowerCase().replace(/[^a-z0-9_]/g, '').slice(0, 24) || 'kreator';
+                const ins = await _supabase.from('profiles').insert([{
+                    id: currentUser.id,
+                    username: dasar0.length >= 3 ? dasar0 : 'user' + dasar0,
+                    display_name: dasar0.length >= 2 ? dasar0 : 'kreator'
+                }]).select('id,username,display_name,bio,avatar_url,is_admin,followers_count');
+                if (!ins.error && ins.data && ins.data[0]) p = ins.data[0];
+            }
+            p = p || {};
             const dasar = (currentUser.email || 'kreator').split('@')[0];
             userProfile = {
                 id: currentUser.id,
@@ -2513,6 +2854,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             if (row) row.classList.toggle('danger', !!currentUser);
             const dn = document.getElementById('donasi');
             if (dn && dn.classList.contains('active-page') && typeof muatHalamanDonasi === 'function') muatHalamanDonasi();
+            if (typeof aturNavAdmin === 'function') aturNavAdmin();
         }
         async function aksiAuth() {
             if (!currentUser) { keLogin(); return; }
@@ -2814,6 +3156,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             if (!id) return;
             if (aksi === 'share') bukaBagikan(id);
             else if (aksi === 'fav') { const prev = activeNovelId; activeNovelId = id; toggleFavorite(); activeNovelId = prev; }
+            else if (aksi === 'lapor') bukaLaporan(id);
             else if (aksi === 'ulasan') {
                 bukaDetailNovel(id).then(function () {
                     const t = document.querySelector('.dv-tab[onclick*="detail-pane-ulasan"]') || document.querySelectorAll('.dv-tab')[1];
@@ -3013,6 +3356,500 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
         const _ubahTemaLama = ubahTemaReader;
         ubahTemaReader = function (t) { _ubahTemaLama(t); try { localStorage.setItem('reader_tema', t); } catch (e) { } };
 
+        // ====== MODERASI & LAPORAN (v12) ======
+        const ALASAN_LAPOR = {
+            hak_cipta: { label: 'Pelanggaran hak cipta', ikon: 'i-copyright' },
+            dewasa: { label: 'Konten dewasa / tidak pantas', ikon: 'i-eye-off' },
+            sara: { label: 'Ujaran kebencian / SARA', ikon: 'i-ban' },
+            kekerasan: { label: 'Kekerasan atau konten berbahaya', ikon: 'i-alert' },
+            spam: { label: 'Spam atau iklan', ikon: 'i-doc' },
+            data_pribadi: { label: 'Membocorkan data pribadi', ikon: 'i-shield' },
+            lainnya: { label: 'Lainnya', ikon: 'i-flag' }
+        };
+        const svgIc = (id, cls) => '<svg class="ic ' + (cls || '') + '" aria-hidden="true"><use href="#' + id + '"/></svg>';
+        function aturNavAdmin() {
+            const admin = !!(currentUser && userProfile.isAdmin && MODERASI_AKTIF);
+            if (window.NavLens && window.NavLens.setVisible) window.NavLens.setVisible('moderasi', admin);
+            if (admin) ambilJumlahModerasi();
+            else {
+                setBadgeNav(0);
+                const p = document.getElementById('moderasi');
+                if (p && p.classList.contains('active-page')) bukaHalaman('beranda');
+            }
+        }
+        function setBadgeNav(n) {
+            document.querySelectorAll('#bottomNav .nav-badge').forEach(function (b) { b.textContent = n > 99 ? '99+' : n; b.hidden = !(n > 0); });
+        }
+        let jmlModerasi = { antrean: 0, laporan: 0 };
+        async function ambilJumlahModerasi() {
+            if (!(currentUser && userProfile.isAdmin)) return;
+            const { data, error } = await _supabase.rpc('jumlah_moderasi');
+            if (error || !data) return;
+            jmlModerasi = data;
+            setBadgeNav((data.antrean || 0) + (data.laporan || 0));
+            const a = document.getElementById('cntAntrean'), l = document.getElementById('cntLaporan');
+            if (a) { a.textContent = data.antrean || 0; }
+            if (l) { l.textContent = data.laporan || 0; l.classList.toggle('alert', (data.laporan || 0) > 0); }
+        }
+        setInterval(function () { if (!document.hidden) ambilJumlahModerasi(); }, 60000);
+        document.addEventListener('visibilitychange', function () { if (!document.hidden) ambilJumlahModerasi(); });
+
+        let segModerasi = 'antrean';
+        function ganti_segmen(s) {
+            segModerasi = s;
+            const seg = document.getElementById('modSeg');
+            seg.dataset.pos = s === 'antrean' ? '0' : '1';
+            seg.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.dataset.seg === s); });
+            renderModerasi();
+        }
+        async function muatModerasi() {
+            if (!(currentUser && userProfile.isAdmin)) { bukaHalaman('beranda'); return; }
+            await ambilJumlahModerasi();
+            renderModerasi();
+        }
+        function kosongModerasi(teks) {
+            return '<div class="mod-empty">' + svgIc('i-check-circle') + '<div>' + esc(teks) + '</div></div>';
+        }
+        async function renderModerasi() {
+            const box = document.getElementById('modList');
+            box.innerHTML = '<div class="mod-empty">Memuat...</div>';
+            if (segModerasi === 'antrean') {
+                const { data, error } = await _supabase.rpc('daftar_antrean');
+                if (error) { box.innerHTML = kosongModerasi('Gagal memuat: ' + error.message); return; }
+                if (!data || !data.length) { box.innerHTML = kosongModerasi('Tidak ada karya yang menunggu. Semua beres!'); return; }
+                box.innerHTML = data.map(function (n) {
+                    return '<div class="mod-card" data-id="' + esc(n.id) + '">' +
+                        '<div class="mod-top"><img class="mod-cover" src="' + esc(coverSrc(n)) + '" alt="">' +
+                        '<div class="mod-info"><h3 class="mod-title">' + esc(n.title) + '</h3>' +
+                        '<div class="mod-meta"><span>' + svgIc('i-user') + esc(n.author) + '</span><span>' + svgIc('i-doc') + esc(n.category) + '</span><span>' + svgIc('i-clock') + esc(waktuRelatif(n.created_at)) + '</span></div></div></div>' +
+                        (n.synopsis ? '<p class="mod-syn">' + esc(n.synopsis) + '</p>' : '') +
+                        '<div class="mod-act">' +
+                        '<button type="button" class="gbtn" onclick="lihatKaryaModerasi(\'' + esc(n.id) + '\')">' + svgIc('i-eye', 'sm') + 'Lihat</button>' +
+                        '<button type="button" class="gbtn red" onclick="bukaTolak(\'' + esc(n.id) + '\')">' + svgIc('i-x-circle', 'sm') + 'Tolak</button>' +
+                        '<button type="button" class="gbtn green" onclick="setujuiKarya(\'' + esc(n.id) + '\',this)">' + svgIc('i-check-circle', 'sm') + 'Setujui</button>' +
+                        '</div></div>';
+                }).join('');
+            } else {
+                const { data, error } = await _supabase.rpc('daftar_laporan');
+                if (error) { box.innerHTML = kosongModerasi('Gagal memuat: ' + error.message); return; }
+                if (!data || !data.length) { box.innerHTML = kosongModerasi('Belum ada karya dengan 2 laporan atau lebih.'); return; }
+                box.innerHTML = data.map(function (n) {
+                    const alasan = (n.alasan || []).map(function (r) { return '<span class="mod-chip' + (r === 'hak_cipta' ? ' hot' : '') + '">' + esc((ALASAN_LAPOR[r] || { label: r }).label) + '</span>'; }).join('');
+                    const catatan = (n.catatan || []).slice(0, 3).map(function (c) { return '“' + esc(c) + '”'; }).join('<br>');
+                    const sumber = (n.sumber || []).slice(0, 2).map(function (c) { return esc(c); }).join('<br>');
+                    return '<div class="mod-card" data-id="' + esc(n.id) + '">' +
+                        '<div class="mod-top"><img class="mod-cover" src="' + esc(coverSrc(n)) + '" alt="">' +
+                        '<div class="mod-info"><h3 class="mod-title">' + esc(n.title) + '</h3>' +
+                        '<div class="mod-meta"><span>' + svgIc('i-user') + esc(n.author) + '</span><span>' + svgIc('i-flag') + n.jumlah + ' laporan</span><span>' + svgIc('i-clock') + esc(waktuRelatif(n.terakhir)) + '</span></div>' +
+                        '<div class="mod-chips">' + alasan + '</div></div></div>' +
+                        (catatan ? '<div class="mod-note"><b>Catatan pelapor:</b><br>' + catatan + '</div>' : '') +
+                        (sumber ? '<div class="mod-note"><b>Sumber karya asli:</b><br>' + sumber + '</div>' : '') +
+                        '<div class="mod-act">' +
+                        '<button type="button" class="gbtn" onclick="lihatKaryaModerasi(\'' + esc(n.id) + '\')">' + svgIc('i-eye', 'sm') + 'Lihat</button>' +
+                        '<button type="button" class="gbtn" onclick="abaikanLaporan(\'' + esc(n.id) + '\',this)">' + svgIc('i-check-circle', 'sm') + 'Abaikan</button>' +
+                        '<button type="button" class="gbtn red" onclick="sembunyikanKarya(\'' + esc(n.id) + '\',this)">' + svgIc('i-ban', 'sm') + 'Sembunyikan</button>' +
+                        '</div></div>';
+                }).join('');
+            }
+        }
+        function lihatKaryaModerasi(id) { bukaDetailNovel(id); }
+        function hapusKartuModerasi(id) {
+            const k = document.querySelector('#modList .mod-card[data-id="' + id + '"]');
+            if (k) { k.classList.add('keluar'); setTimeout(function () { k.remove(); const b = document.getElementById('modList'); if (!b.children.length) b.innerHTML = kosongModerasi(segModerasi === 'antrean' ? 'Tidak ada karya yang menunggu. Semua beres!' : 'Belum ada karya dengan 2 laporan atau lebih.'); }, 330); }
+            ambilJumlahModerasi();
+        }
+        async function jalankanModerasi(fn, args, tombol, pesanOk, id) {
+            if (tombol) tombol.disabled = true;
+            const { error } = await _supabase.rpc(fn, args);
+            if (error) { if (tombol) tombol.disabled = false; showToast('Gagal: ' + error.message, 'error'); return false; }
+            showToast(pesanOk, 'success');
+            hapusKartuModerasi(id);
+            if (typeof muatKaryaBeranda === 'function') muatKaryaBeranda();
+            return true;
+        }
+        function setujuiKarya(id, btn) { jalankanModerasi('setujui_karya', { p_novel: String(id) }, btn, 'Karya disetujui dan sudah terbit', id); }
+        function sembunyikanKarya(id, btn) { jalankanModerasi('sembunyikan_karya', { p_novel: String(id) }, btn, 'Karya disembunyikan', id); }
+        function abaikanLaporan(id, btn) { jalankanModerasi('abaikan_laporan', { p_novel: String(id) }, btn, 'Laporan diabaikan', id); }
+
+        let tolakId = null;
+        function bukaTolak(id) {
+            tolakId = id;
+            document.getElementById('tolakAlasan').value = '';
+            document.getElementById('rejectSheet').classList.add('show');
+        }
+        function tutupTolak() { document.getElementById('rejectSheet').classList.remove('show'); }
+        function isiAlasanTolak(t) { document.getElementById('tolakAlasan').value = t; }
+        async function kirimTolak() {
+            if (!tolakId) return;
+            const id = tolakId, alasan = document.getElementById('tolakAlasan').value.trim();
+            tutupTolak();
+            await jalankanModerasi('tolak_karya', { p_novel: String(id), p_alasan: alasan }, null, 'Karya ditolak', id);
+        }
+
+        // --- laporkan karya ---
+        let laporanNovel = null, laporanAlasan = '';
+        function bangunDaftarAlasan() {
+            document.getElementById('rpList').innerHTML = Object.keys(ALASAN_LAPOR).map(function (k) {
+                return '<button type="button" class="rp-row ' + k + '" data-r="' + k + '" onclick="pilihAlasanLapor(\'' + k + '\')">' + svgIc(ALASAN_LAPOR[k].ikon) + '<span>' + esc(ALASAN_LAPOR[k].label) + '</span><i class="tick"></i></button>';
+            }).join('');
+        }
+        function pilihAlasanLapor(k) {
+            laporanAlasan = k;
+            document.querySelectorAll('#rpList .rp-row').forEach(function (b) { b.classList.toggle('on', b.dataset.r === k); });
+            document.getElementById('rpSumber').classList.toggle('show', k === 'hak_cipta');
+        }
+        async function bukaLaporan(id) {
+            if (!wajibLogin('Masuk dulu untuk melaporkan karya')) return;
+            id = id || activeNovelId;
+            const n = await ambilNovel(id); if (!n) return;
+            if (n.author_id && n.author_id === currentUser.id) { showToast('Ini karyamu sendiri', 'info'); return; }
+            laporanNovel = { id: id, title: n.title };
+            laporanAlasan = '';
+            bangunDaftarAlasan();
+            document.getElementById('rpJudul').textContent = n.title;
+            document.getElementById('rpDetail').value = '';
+            document.getElementById('rpUrl').value = '';
+            document.getElementById('rpSumber').classList.remove('show');
+            document.getElementById('reportSheet').classList.add('show');
+        }
+        function tutupLaporan() { document.getElementById('reportSheet').classList.remove('show'); }
+        async function kirimLaporan() {
+            if (!laporanNovel) return;
+            if (!laporanAlasan) { showToast('Pilih alasan laporan dulu', 'error'); return; }
+            const btn = document.getElementById('rpKirim'); btn.disabled = true;
+            const { error } = await _supabase.from('reports').insert([{
+                novel_id: laporanNovel.id,
+                reason: laporanAlasan,
+                detail: document.getElementById('rpDetail').value.trim().slice(0, 400),
+                source_url: laporanAlasan === 'hak_cipta' ? document.getElementById('rpUrl').value.trim().slice(0, 300) : ''
+            }]);
+            btn.disabled = false;
+            if (error) {
+                if (error.code === '23505') { showToast('Kamu sudah melaporkan karya ini', 'info'); tutupLaporan(); return; }
+                showToast('Gagal mengirim laporan: ' + error.message, 'error'); return;
+            }
+            tutupLaporan();
+            showToast('Laporan terkirim. Terima kasih sudah membantu', 'success');
+        }
+
+        function labelStatus(n) {
+            if (!MODERASI_AKTIF) return '';
+            if (n.status === 'pending') return '<div class="status-pill pending">Menunggu persetujuan</div>';
+            if (n.status === 'rejected') return '<div class="status-pill rejected">Ditolak</div>';
+            if (n.is_hidden) return '<div class="status-pill hidden">Disembunyikan</div>';
+            return '';
+        }
+        function catatanStatus(n) {
+            return (MODERASI_AKTIF && n.status === 'rejected' && n.reject_reason) ? '<div class="status-note">Alasan: ' + esc(n.reject_reason) + '</div>' : '';
+        }
+
+        // ====== KOMIK, TAMBAH BAB, TAMAT (v13) ======
+        const dukungWebp = (function () { try { return document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') === 0; } catch (e) { return false; } })();
+        const OPSI_KOMIK = { maxWidth: 960, maxSide: 1400, maxBytes: 140 * 1024, q: 0.86, minQ: 0.58, webp: true };
+
+        let modeUpload = 'baru', karyaTerpilih = null, daftarKarya = [], tamatDipilih = false;
+        let kbPanels = [];
+        const KB_MAX = 12;
+
+        function kategoriAktif() {
+            if (modeUpload === 'bab') return karyaTerpilih ? karyaTerpilih.category : '';
+            return document.getElementById('inputKategori').value;
+        }
+        function tampil(id, on) { const e = document.getElementById(id); if (e) e.style.display = on ? '' : 'none'; }
+        function aturTampilanUpload() {
+            const komik = kategoriAktif() === 'Komik';
+            tampil('grpBaru', modeUpload === 'baru');
+            tampil('grpPilihKarya', modeUpload === 'bab');
+            tampil('grpTeks', !komik);
+            tampil('boxKomik', komik);
+            const jd = document.getElementById('judulModalUpload'); if (jd) jd.innerText = modeUpload === 'bab' ? 'Tambah Bab' : 'Unggah Karya Baru';
+            const nm = document.getElementById('noteModerasi');
+            if (nm) { nm.style.display = (modeUpload === 'baru' && MODERASI_AKTIF && !userProfile.isAdmin) ? '' : 'none'; }
+            if (komik && !kbPanels.length) initKomik(3);
+            if (!komik && typeof gantiMetodeUpload === 'function') gantiMetodeUpload();
+        }
+        function setModeUpload(m) {
+            modeUpload = m;
+            const seg = document.getElementById('upSeg');
+            seg.dataset.pos = m === 'baru' ? '0' : '1';
+            seg.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.dataset.m === m); });
+            if (m === 'bab') muatDaftarKarya();
+            else { karyaTerpilih = null; tamatDipilih = false; renderTamat(); }
+            aturTampilanUpload();
+        }
+        async function muatDaftarKarya() {
+            const sel = document.getElementById('selectKarya');
+            sel.innerHTML = '<option value="">Memuat karya...</option>';
+            let q = _supabase.from('novels').select('*').order('created_at', { ascending: false }).limit(300);
+            if (!userProfile.isAdmin) {
+                const nama = String(userProfile.nama || '').replace(/[,()*%\\]/g, ' ');
+                q = q.or('author_id.eq.' + currentUser.id + ',and(author_id.is.null,author.ilike.' + nama + ')');
+            }
+            const { data, error } = await q;
+            if (error) { sel.innerHTML = '<option value="">Gagal memuat</option>'; showToast('Gagal memuat karya: ' + error.message, 'error'); return; }
+            daftarKarya = data || [];
+            if (!daftarKarya.length) {
+                sel.innerHTML = '<option value="">Belum ada karya — buat Karya Baru dulu</option>';
+                karyaTerpilih = null; document.getElementById('infoKarya').innerText = ''; aturTampilanUpload(); return;
+            }
+            sel.innerHTML = daftarKarya.map(function (n) {
+                return '<option value="' + esc(n.id) + '">' + esc(n.title) + ' · ' + esc(n.category) + (userProfile.isAdmin && n.author ? ' · ' + esc(n.author) : '') + '</option>';
+            }).join('');
+            pilihKaryaTambahBab();
+        }
+        async function pilihKaryaTambahBab() {
+            const id = document.getElementById('selectKarya').value;
+            karyaTerpilih = daftarKarya.find(function (n) { return String(n.id) === String(id); }) || null;
+            if (!karyaTerpilih) { aturTampilanUpload(); return; }
+            let terakhir = 0;
+            try {
+                const { data } = await _supabase.from('episodes').select('episode_number').eq('novel_id', karyaTerpilih.id).order('episode_number', { ascending: false }).limit(1);
+                if (data && data[0]) terakhir = data[0].episode_number;
+            } catch (e) { }
+            document.getElementById('inputNomorBab').value = terakhir + 1;
+            document.getElementById('infoKarya').innerText = 'Kategori ' + karyaTerpilih.category + ' · bab terakhir: ' + (terakhir || 'belum ada');
+            tamatDipilih = !!karyaTerpilih.is_tamat; renderTamat();
+            aturTampilanUpload();
+        }
+        function toggleTamat() { tamatDipilih = !tamatDipilih; renderTamat(); }
+        function renderTamat() { const s = document.getElementById('swTamat'); if (s) s.classList.toggle('on', tamatDipilih); }
+
+        // --- pembuat panel komik ---
+        function kbBaru() { return { blob: null, url: '', info: '', teks: '' }; }
+        function initKomik(n) { kbPanels.forEach(function (p) { if (p.url) URL.revokeObjectURL(p.url); }); kbPanels = []; for (let i = 0; i < (n || 3); i++) kbPanels.push(kbBaru()); renderKB(); }
+        function resetKomikForm() { if (kbPanels.length) initKomik(3); tamatDipilih = (modeUpload === 'bab' && karyaTerpilih) ? !!karyaTerpilih.is_tamat : false; renderTamat(); const pv = document.getElementById('kbPreview'); if (pv) { pv.classList.remove('show'); pv.innerHTML = ''; } }
+        function renderKB() {
+            const list = document.getElementById('kbList'); if (!list) return;
+            list.innerHTML = kbPanels.map(function (p, i) {
+                return '<div class="kb-card"><div class="kb-head"><b>Panel ' + (i + 1) + '</b>' +
+                    (kbPanels.length > 1 ? '<button type="button" class="kb-del" onclick="hapusPanel(' + i + ')" aria-label="Hapus panel"><i class="fas fa-trash-can"></i></button>' : '') + '</div>' +
+                    '<label class="kb-drop">' + (p.url ? '<img src="' + p.url + '" alt="">' : '<span>＋ Pilih gambar panel</span>') +
+                    '<input type="file" accept="image/*" hidden onchange="pilihGambarPanel(' + i + ', this)"></label>' +
+                    '<div class="kb-info" id="kbInfo' + i + '">' + esc(p.info) + '</div>' +
+                    '<textarea maxlength="300" placeholder="Dialog / teks untuk panel ini (opsional)" oninput="kbPanels[' + i + '].teks=this.value">' + esc(p.teks) + '</textarea></div>';
+            }).join('');
+            hitungTotalKB();
+        }
+        function hitungTotalKB() {
+            const t = kbPanels.reduce(function (a, p) { return a + (p.blob ? p.blob.size : 0); }, 0);
+            const el = document.getElementById('kbTotal');
+            if (el) el.innerText = kbPanels.length + ' panel · total gambar ' + (t ? formatUkuran(t) : '0 KB');
+        }
+        function tambahPanel() { if (kbPanels.length >= KB_MAX) { showToast('Maksimal ' + KB_MAX + ' panel per bab', 'info'); return; } kbPanels.push(kbBaru()); renderKB(); }
+        function hapusPanel(i) { if (kbPanels[i] && kbPanels[i].url) URL.revokeObjectURL(kbPanels[i].url); kbPanels.splice(i, 1); renderKB(); }
+        async function pilihGambarPanel(i, inp) {
+            const file = inp.files && inp.files[0]; if (!file) return;
+            if (!file.type || file.type.indexOf('image/') !== 0) { showToast('Pilih file gambar', 'error'); return; }
+            const info = document.getElementById('kbInfo' + i); if (info) info.innerText = 'Mengompres...';
+            const blob = await optimasiGambar(file, OPSI_KOMIK);
+            const p = kbPanels[i]; if (!p) return;
+            if (p.url) URL.revokeObjectURL(p.url);
+            p.blob = blob; p.url = URL.createObjectURL(blob);
+            p.info = formatUkuran(file.size) + ' → ' + formatUkuran(blob.size) + (blob.type === 'image/webp' ? ' (WebP)' : '');
+            renderKB();
+        }
+        function pratinjauKomik() {
+            const pv = document.getElementById('kbPreview');
+            const isi = kbPanels.map(function (p) { return { img: p.url, text: p.teks }; }).filter(function (p) { return p.img || (p.text || '').trim(); });
+            if (!isi.length) { showToast('Isi minimal satu panel dulu', 'info'); return; }
+            pv.innerHTML = '<div class="komik-halaman" style="color:#111">' + komikHTML(isi) + '</div>';
+            pv.classList.add('show');
+            pv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // --- tata letak komik otomatis (persegi, lebar, jajar genjang, dst) ---
+        function komikHTML(panels) {
+            const POLA = [1, 2, 3, 2, 1, 2];
+            let html = '', buf = [], pola = 0, flip = false, tunggal = 0, sisi = 0;
+            function baris(row) {
+                const k = row.length;
+                let h = '<div class="kr kr-' + k + (k === 2 && flip ? ' flip' : '') + '">';
+                row.forEach(function (p) {
+                    const teks = String(p.text || '').trim();
+                    const tipe = k === 1 ? ((tunggal++ % 2) ? 'slant' : 'wide') : 'seg';
+                    const over = teks && ((k === 1 && teks.length <= 140) || (k === 2 && teks.length <= 34));
+                    const s = (sisi++ % 2) ? 'r' : 'l';
+                    h += '<figure class="kp kp-' + tipe + '"><div class="kp-shape"><img src="' + esc(p.img) + '" alt="" loading="lazy" decoding="async"></div>' +
+                        (teks ? '<figcaption class="kp-bubble ' + (over ? 'over ' : 'under ') + s + '">' + esc(teks) + '</figcaption>' : '') + '</figure>';
+                });
+                if (k === 2) flip = !flip;
+                return h + '</div>';
+            }
+            function kosongkan() {
+                while (buf.length) { let k = POLA[pola++ % POLA.length]; k = Math.min(k, buf.length); html += baris(buf.splice(0, k)); }
+            }
+            (panels || []).forEach(function (p) {
+                if (p.img) buf.push(p);
+                else if (String(p.text || '').trim()) { kosongkan(); html += '<div class="kp-narasi">' + esc(p.text) + '</div>'; }
+            });
+            kosongkan();
+            return html;
+        }
+
+        // --- prosedur: langkah demi langkah ---
+        function prosedurHTML(teks) {
+            const baris = String(teks || '').split(/\r?\n/).map(function (s) { return s.trim(); }).filter(Boolean);
+            if (!baris.length) return '<p>Konten bab kosong.</p>';
+            const reLangkah = /^(?:langkah\s*)?(\d{1,2})[\.\):\-]\s*(.+)$/i;
+            const reNote = /^(catatan|tips|peringatan|perhatian|note)\s*[:\-]\s*(.+)$/i;
+            const adaNomor = baris.some(function (b) { return reLangkah.test(b); });
+            const intro = [], steps = [];
+            baris.forEach(function (b) {
+                const m = b.match(reLangkah), n = b.match(reNote);
+                if (m) steps.push({ t: [m[2]], notes: [] });
+                else if (n && steps.length) steps[steps.length - 1].notes.push([n[1], n[2]]);
+                else if (!adaNomor) steps.push({ t: [b], notes: [] });
+                else if (steps.length) steps[steps.length - 1].t.push(b);
+                else intro.push(b);
+            });
+            return (intro.length ? '<div class="pr-intro">' + intro.map(esc).join('<br>') + '</div>' : '') +
+                '<ol class="pr-steps">' + steps.map(function (s, i) {
+                    return '<li><span class="pr-n">' + (i + 1) + '</span><div class="pr-body">' + s.t.map(function (x) { return '<p>' + esc(x) + '</p>'; }).join('') +
+                        s.notes.map(function (n) { return '<div class="pr-note"><b>' + esc(n[0]) + ':</b> ' + esc(n[1]) + '</div>'; }).join('') + '</div></li>';
+                }).join('') + '</ol><div class="akhir-bab">— akhir bab —</div>';
+        }
+
+        // --- tampilan baca menyesuaikan kategori ---
+        function renderBab(ep) {
+            const box = document.getElementById('textContentContainer');
+            const kat = (ep.novels && ep.novels.category) || '';
+            box.dataset.kat = String(kat).toLowerCase();
+            if (kat === 'Komik' && Array.isArray(ep.panels) && ep.panels.length) {
+                box.innerHTML = '<div class="komik-halaman">' + komikHTML(ep.panels) + '</div><div class="akhir-bab">— akhir bab —</div>';
+            } else if (kat === 'Prosedur') {
+                box.innerHTML = prosedurHTML(ep.content);
+            } else renderIsiBab(ep.content);
+            renderAkhirBab(ep.novel_id, ep.episode_number);
+        }
+
+        // --- akhir bab: Selesai Bab / TAMAT ---
+        async function renderAkhirBab(novelId, epNo) {
+            const box = document.getElementById('akhirBab'); if (!box) return;
+            box.innerHTML = '';
+            let terakhir = epNo, tamat = false;
+            try { const { data } = await _supabase.from('episodes').select('episode_number').eq('novel_id', novelId).order('episode_number', { ascending: false }).limit(1); if (data && data[0]) terakhir = data[0].episode_number; } catch (e) { }
+            try { const { data, error } = await _supabase.from('novels').select('is_tamat').eq('id', novelId).maybeSingle(); if (!error && data) tamat = !!data.is_tamat; } catch (e) { }
+            if (String(activeNovelId) !== String(novelId) || activeEpNumber !== epNo) return;
+            if (epNo < terakhir) {
+                box.innerHTML = '<div class="akhir-aksi"><button type="button" class="gbtn blue block" style="height:50px;font-size:16px" onclick="selesaiBab()">' + svgIc('i-check-circle') + 'Selesai Bab · Lanjut Bab ' + (epNo + 1) + '</button></div>';
+            } else if (tamat) {
+                box.innerHTML = '<div class="akhir-aksi"><div class="tamat-kartu"><h3>TAMAT</h3><p>Terima kasih sudah membaca sampai akhir.</p><button type="button" class="gbtn block" onclick="nilaiKaryaSelesai()"><i class="fas fa-star"></i> Beri rating karya ini</button></div></div>';
+            } else {
+                box.innerHTML = '<div class="akhir-aksi"><div class="akhir-info">Ini bab terbaru. Bab berikutnya segera hadir.</div><button type="button" class="gbtn block" onclick="kembaliKeKarya()">Kembali ke karya</button></div>';
+            }
+        }
+        function selesaiBab() { pindahBab(1); }
+        function kembaliKeKarya() { bukaDetailNovel(activeNovelId); }
+        function nilaiKaryaSelesai() {
+            bukaDetailNovel(activeNovelId).then(function () {
+                const t = document.querySelector('.dv-tab[onclick*="detail-pane-ulasan"]') || document.querySelectorAll('.dv-tab')[1];
+                if (t) gantiTabDetail(t, 'detail-pane-ulasan');
+            });
+        }
+
+        // --- simpan karya / bab ---
+        async function unggahGambarKomik(blob, novelId, nomorBab, i) {
+            const ext = blob.type === 'image/webp' ? 'webp' : 'jpg';
+            const path = currentUser.id + '/' + novelId + '/' + nomorBab + '-' + (i + 1) + '-' + Date.now().toString(36) + '.' + ext;
+            const { error } = await _supabase.storage.from('komik').upload(path, blob, { contentType: blob.type || 'image/webp', upsert: true, cacheControl: '31536000' });
+            if (error) throw new Error("Gambar komik gagal diunggah ke bucket 'komik' (" + error.message + "). Pastikan supabase_rating_komik.sql sudah dijalankan.");
+            const { data } = _supabase.storage.from('komik').getPublicUrl(path);
+            return data.publicUrl;
+        }
+        async function prosesUnggah() {
+            if (!currentUser) { wajibLogin('Masuk dulu untuk mengunggah karya'); return; }
+            const mode = modeUpload;
+            const kategori = kategoriAktif();
+            const komik = kategori === 'Komik';
+            const penulis = (userProfile.nama || '').trim();
+            const nomorBab = parseInt(document.getElementById('inputNomorBab').value);
+            const judulBab = document.getElementById('inputJudulBab').value.trim();
+            const judul = document.getElementById('inputJudul').value.trim();
+            const sinopsis = document.getElementById('inputSinopsis').value.trim();
+
+            if (!(nomorBab > 0) || !judulBab) { showToast('Isi nomor dan judul bab', 'error'); return; }
+            if (mode === 'baru' && !judul) { showToast('Isi judul karya', 'error'); return; }
+            if (mode === 'bab' && !karyaTerpilih) { showToast('Pilih karya yang mau ditambah bab', 'error'); return; }
+
+            let contentText = '', panelsSiap = null;
+            if (komik) {
+                panelsSiap = kbPanels.filter(function (p) { return p.blob || (p.teks || '').trim(); });
+                if (!panelsSiap.length) { showToast('Isi minimal satu panel (gambar atau teks)', 'error'); return; }
+                contentText = panelsSiap.map(function (p) { return (p.teks || '').trim(); }).filter(Boolean).join('\n') || '[Komik]';
+            } else {
+                const metode = document.getElementById('inputMetode').value;
+                contentText = metode === 'text' ? document.getElementById('inputTextContent').value.trim() : pdfExtractedText.trim();
+                if (!contentText) { showToast('Teks / PDF bab belum tersedia!', 'error'); return; }
+            }
+
+            const btn = document.getElementById('btnSimpanUpload');
+            btn.disabled = true; btn.innerText = 'Mengolah & Menyimpan...';
+            try {
+                let novelId = null, baruStatus = null;
+
+                if (mode === 'bab') {
+                    novelId = karyaTerpilih.id;
+                    const sah = userProfile.isAdmin || (karyaTerpilih.author_id
+                        ? karyaTerpilih.author_id === currentUser.id
+                        : String(karyaTerpilih.author || '').toLowerCase() === penulis.toLowerCase());
+                    if (!sah) throw new Error('Kamu bukan pemilik karya ini');
+                    const { data: ada } = await _supabase.from('episodes').select('id').eq('novel_id', novelId).eq('episode_number', nomorBab).limit(1);
+                    if (ada && ada.length) throw new Error('Bab ' + nomorBab + ' sudah ada. Pakai nomor bab lain.');
+                } else {
+                    const { data: sama } = await _supabase.from('novels').select('id').eq('title', judul).eq('author_id', currentUser.id).limit(1);
+                    if (sama && sama.length) throw new Error('Kamu sudah punya karya berjudul ini. Pakai tab "Tambah Bab".');
+                    let coverBlob = filePosterBlob;
+                    if (!coverBlob && komik) { const f = panelsSiap.find(function (p) { return p.blob; }); if (f) coverBlob = await optimasiGambar(f.blob, { maxSide: 900, maxBytes: 230 * 1024, force: true }); }
+                    let posterUrl = '';
+                    if (coverBlob) {
+                        const hasil = await unggahPoster(coverBlob);
+                        posterUrl = hasil.url;
+                        if (hasil.via === 'inline') showToast("Cover tersimpan versi ringan (bucket 'posters' belum siap)", 'info');
+                    }
+                    const baris = { title: judul, author: penulis, category: kategori, poster_url: posterUrl || '', author_id: currentUser.id, synopsis: sinopsis };
+                    if (tamatDipilih) baris.is_tamat = true;
+                    const { data: novelBaru, error: errNovel } = await _supabase.from('novels').insert([baris]).select().single();
+                    if (errNovel) throw errNovel;
+                    novelId = novelBaru.id; baruStatus = novelBaru.status || null;
+                }
+
+                const barisBab = { novel_id: novelId, episode_number: nomorBab, title: judulBab, content: contentText };
+                if (komik) {
+                    const hasil = [];
+                    const total = panelsSiap.filter(function (p) { return p.blob; }).length;
+                    let n = 0;
+                    for (let i = 0; i < panelsSiap.length; i++) {
+                        const p = panelsSiap[i];
+                        if (p.blob) { n++; btn.innerText = 'Mengunggah gambar ' + n + '/' + total + '...'; hasil.push({ img: await unggahGambarKomik(p.blob, novelId, nomorBab, i), text: (p.teks || '').trim() }); }
+                        else hasil.push({ img: null, text: (p.teks || '').trim() });
+                    }
+                    barisBab.panels = hasil;
+                }
+                const { error: errEp } = await _supabase.from('episodes').insert([barisBab]);
+                if (errEp) throw errEp;
+
+                if (mode === 'bab' && tamatDipilih !== !!karyaTerpilih.is_tamat) {
+                    await _supabase.from('novels').update({ is_tamat: tamatDipilih }).eq('id', novelId);
+                    karyaTerpilih.is_tamat = tamatDipilih;
+                }
+
+                showToast(baruStatus === 'pending'
+                    ? 'Karya terkirim! Menunggu persetujuan admin sebelum tayang.'
+                    : (mode === 'bab' ? 'Bab berhasil ditambahkan!' : 'Karya berhasil disimpan dan dipublikasikan!'), 'success');
+                resetFormUnggahBab();
+                if (mode === 'baru') { document.getElementById('inputJudul').value = ''; document.getElementById('inputSinopsis').value = ''; }
+                tutupUpload();
+                muatKaryaBeranda();
+                muatDataAkunSaya();
+            } catch (err) {
+                console.error(err);
+                showToast('Terjadi kesalahan: ' + (err.message || err), 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Simpan & Publikasikan';
+            }
+        }
+
         // ====== MODE GELAP ======
         function setTheme(t, animate) {
             const root = document.documentElement;
@@ -3120,122 +3957,11 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             showToast(mau ? "Kamu mengikuti " + profilDilihat.nama : "Berhenti mengikuti " + profilDilihat.nama, "success");
         }
 
-        async function prosesUnggah() {
-            const metode = document.getElementById('inputMetode').value;
-            const judul = document.getElementById('inputJudul').value.trim();
-            if (!currentUser) { wajibLogin('Masuk dulu untuk mengunggah karya'); return; }
-            const penulis = (userProfile.nama || '').trim();
-            const sinopsis = document.getElementById('inputSinopsis').value.trim();
-            const kategori = document.getElementById('inputKategori').value;
-            const nomorBab = parseInt(document.getElementById('inputNomorBab').value);
-            const judulBab = document.getElementById('inputJudulBab').value.trim();
-
-            let contentText = "";
-
-            if (metode === 'text') {
-                contentText = document.getElementById('inputTextContent').value.trim();
-            } else {
-                contentText = pdfExtractedText.trim();
-            }
-
-            if (!judul || !penulis || !judulBab || !contentText) {
-                showToast("Harap isi metadata dan pastikan teks/PDF tersedia!", "error");
-                return;
-            }
-
-            const btn = document.getElementById('btnSimpanUpload');
-            btn.disabled = true;
-            btn.innerText = "Mengolah & Menyimpan...";
-
-            try {
-                let novelId = null;
-                let posterUrl = "";
-
-                const { data: existingNovel } = await _supabase
-                    .from('novels')
-                    .select('id, poster_url, author, author_id')
-                    .eq('title', judul)
-                    .single();
-
-                if (existingNovel) {
-                    const bukanPemilik = existingNovel.author_id
-                        ? existingNovel.author_id !== currentUser.id
-                        : existingNovel.author.toLowerCase() !== penulis.toLowerCase();
-                    if (bukanPemilik) {
-                        showToast("Akses Ditolak: Anda bukan kreator/penulis asli dari karya ini!", "error");
-                        btn.disabled = false;
-                        btn.innerText = "Simpan & Publikasikan";
-                        return;
-                    }
-
-                    novelId = existingNovel.id;
-                    posterUrl = existingNovel.poster_url;
-
-                    // Cover baru dipilih? ganti. Kalau cover lama kosong/placeholder, isi otomatis.
-                    const coverKosong = !posterUrl || /placeholder\.com|No\+Cover/i.test(posterUrl);
-                    if (filePosterBlob && (coverManual || coverKosong)) {
-                        const hasil = await unggahPoster(filePosterBlob);
-                        posterUrl = hasil.url;
-                        const { error: errUpd } = await _supabase.from('novels').update({ poster_url: posterUrl }).eq('id', novelId);
-                        if (errUpd) throw errUpd;
-                        showToast(hasil.via === 'storage' ? "Cover karya diperbarui" : "Cover diperbarui (versi ringan, lihat catatan di console)", "success");
-                    }
-                } else {
-                    if (filePosterBlob) {
-                        const hasil = await unggahPoster(filePosterBlob);
-                        posterUrl = hasil.url;
-                        if (hasil.via === 'inline') {
-                            showToast("Cover tersimpan versi ringan (bucket 'posters' belum siap)", "info");
-                        }
-                    }
-
-                    const { data: newNovel, error: errNovel } = await _supabase
-                        .from('novels')
-                        .insert([{ 
-                            title: judul, 
-                            author: penulis, 
-                            category: kategori, 
-                            poster_url: posterUrl || '',
-                            author_id: currentUser.id,
-                            synopsis: sinopsis 
-                        }])
-                        .select()
-                        .single();
-
-                    if (errNovel) throw errNovel;
-                    novelId = newNovel.id;
-                }
-
-                const { error: errEp } = await _supabase
-                    .from('episodes')
-                    .insert([{ 
-                        novel_id: novelId, 
-                        episode_number: nomorBab, 
-                        title: judulBab, 
-                        content: contentText 
-                    }]);
-
-                if (errEp) throw errEp;
-
-                showToast("Karya berhasil disimpan dan dipublikasikan!", "success");
-                resetFormUnggahBab();
-                tutupUpload();
-                muatKaryaBeranda();
-                muatDataAkunSaya();
-
-            } catch (err) {
-                console.error(err);
-                showToast("Terjadi kesalahan: " + err.message, "error");
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "Simpan & Publikasikan";
-            }
-        }
-
         async function muatKaryaBeranda() {
-            const { data: novels, error } = await _supabase
+            await moderasiSiap;
+            const { data: novels, error } = await saring(_supabase
                 .from('novels')
-                .select('*')
+                .select('*'))
                 .order('created_at', { ascending: false });
 
             if (error || !novels) return;
@@ -3246,7 +3972,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             popContainer.innerHTML = populer.map(n => `
                 <div class="featured-item" onclick="bukaDetailNovel('${n.id}')">
                     <div class="featured-ring"><img src="${coverSrc(n)}" class="featured-img" alt=""></div>
-                    <span class="featured-title">${n.title}</span>
+                    <span class="featured-title">${esc(n.title)}</span>
                     <span class="featured-badge"><i class="fas fa-eye"></i> ${n.total_views || 0}</span>
                 </div>
             `).join('');
@@ -3256,14 +3982,14 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
                 <div class="card-item rekomendasi-card-slide" onclick="bukaDetailNovel('${n.id}')">
                     <div class="cover-wrapper">
                         <img src="${coverSrc(n)}" class="cover-img">
-                        <div class="type-badge">${n.category}</div>
+                        <div class="type-badge">${esc(n.category)}</div>
                         <div class="views-badge"><i class="fas fa-eye"></i> ${n.total_views || 0}</div>
                     </div>
                     <div class="card-info">
-                        <div class="card-title-badge">${n.category}</div>
-                        <span class="card-title">${n.title}</span>
-                        <span class="card-author">Karya: ${n.author}</span>
-<div class="card-stats"><span><i class="fas fa-eye"></i>${n.total_views || 0}</span><span class="st-star"><i class="fas fa-star"></i>${ratingLabel(n.id)}</span><span><i class="fas fa-layer-group"></i>${n.category}</span></div>
+                        <div class="card-title-badge">${esc(n.category)}</div>
+                        <span class="card-title">${esc(n.title)}</span>
+                        <span class="card-author">Karya: ${esc(n.author)}</span>
+<div class="card-stats"><span><i class="fas fa-eye"></i>${n.total_views || 0}</span><span class="st-star"><i class="fas fa-star"></i>${ratingLabel(n.id)}</span><span><i class="fas fa-layer-group"></i>${esc(n.category)}</span></div>
                     </div>
                 </div>
             `).join('');
@@ -3274,13 +4000,13 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
                     <div class="card-item" onclick="bukaDetailNovel('${n.id}')">
                         <div class="cover-wrapper">
                             <img src="${coverSrc(n)}" class="cover-img">
-                            <div class="type-badge">${n.category}</div>
+                            <div class="type-badge">${esc(n.category)}</div>
                         </div>
                         <div class="card-info">
-                            <div class="card-title-badge">${n.category}</div>
-                            <span class="card-title">${n.title}</span>
-                            <span class="card-author">Karya: ${n.author}</span>
-<div class="card-stats"><span><i class="fas fa-eye"></i>${n.total_views || 0}</span><span class="st-star"><i class="fas fa-star"></i>${ratingLabel(n.id)}</span><span><i class="fas fa-layer-group"></i>${n.category}</span></div>
+                            <div class="card-title-badge">${esc(n.category)}</div>
+                            <span class="card-title">${esc(n.title)}</span>
+                            <span class="card-author">Karya: ${esc(n.author)}</span>
+<div class="card-stats"><span><i class="fas fa-eye"></i>${n.total_views || 0}</span><span class="st-star"><i class="fas fa-star"></i>${ratingLabel(n.id)}</span><span><i class="fas fa-layer-group"></i>${esc(n.category)}</span></div>
                             <button class="btn-baca">Lihat Detail</button>
                         </div>
                     </div>
@@ -3303,6 +4029,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             akunEl.classList.remove('lihat-orang');
             akunEl.classList.toggle('tamu', !currentUser);
             terapkanTitle(userProfile.isAdmin, userProfile.followers || 0, !!currentUser);
+            aturNavAdmin();
 
             document.getElementById('tab-btn-favorit').style.display = 'block';
             document.getElementById('tab-btn-pengaturan').style.display = 'block';
@@ -3329,13 +4056,15 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
                         <div class="card-item" onclick="bukaDetailNovel('${n.id}')">
                             <div class="cover-wrapper">
                                 <img src="${coverSrc(n)}" class="cover-img">
-                                <div class="type-badge">${n.category}</div>
+                                <div class="type-badge">${esc(n.category)}</div>
+                                ${labelStatus(n)}
                             </div>
                             <div class="card-info">
-                                <div class="card-title-badge">${n.category}</div>
-                                <span class="card-title">${n.title}</span>
-                                <span class="card-author">${n.author}</span>
-<div class="card-stats"><span><i class="fas fa-eye"></i>${n.total_views || 0}</span><span class="st-star"><i class="fas fa-star"></i>${ratingLabel(n.id)}</span><span><i class="fas fa-layer-group"></i>${n.category}</span></div>
+                                <div class="card-title-badge">${esc(n.category)}</div>
+                                <span class="card-title">${esc(n.title)}</span>
+                                <span class="card-author">${esc(n.author)}</span>
+                                ${catatanStatus(n)}
+<div class="card-stats"><span><i class="fas fa-eye"></i>${n.total_views || 0}</span><span class="st-star"><i class="fas fa-star"></i>${ratingLabel(n.id)}</span><span><i class="fas fa-layer-group"></i>${esc(n.category)}</span></div>
                                 <button class="btn-baca">Kelola</button>
                             </div>
                         </div>
@@ -3346,19 +4075,19 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
 
                 const favGrid = document.getElementById('favorite-novels-grid');
                 if(listFavorit.length > 0) {
-                    const favNovels = novels.filter(n => listFavorit.includes(n.id));
+                    const favNovels = novels.filter(n => listFavorit.includes(n.id) && lolosPublik(n));
                     if(favNovels.length > 0) {
                         favGrid.innerHTML = favNovels.map(n => `
                             <div class="card-item" onclick="bukaDetailNovel('${n.id}')">
                                 <div class="cover-wrapper">
                                     <img src="${coverSrc(n)}" class="cover-img">
-                                    <div class="type-badge">${n.category}</div>
+                                    <div class="type-badge">${esc(n.category)}</div>
                                 </div>
                                 <div class="card-info">
-                                    <div class="card-title-badge">${n.category}</div>
-                                    <span class="card-title">${n.title}</span>
-                                    <span class="card-author">${n.author}</span>
-<div class="card-stats"><span><i class="fas fa-eye"></i>${n.total_views || 0}</span><span class="st-star"><i class="fas fa-star"></i>${ratingLabel(n.id)}</span><span><i class="fas fa-layer-group"></i>${n.category}</span></div>
+                                    <div class="card-title-badge">${esc(n.category)}</div>
+                                    <span class="card-title">${esc(n.title)}</span>
+                                    <span class="card-author">${esc(n.author)}</span>
+<div class="card-stats"><span><i class="fas fa-eye"></i>${n.total_views || 0}</span><span class="st-star"><i class="fas fa-star"></i>${ratingLabel(n.id)}</span><span><i class="fas fa-layer-group"></i>${esc(n.category)}</span></div>
                                     <button class="btn-baca">Baca</button>
                                 </div>
                             </div>
@@ -3423,6 +4152,8 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
 
             let qKarya = _supabase.from('novels').select('*');
             qKarya = (profilDilihat && profilDilihat.id) ? qKarya.or('author_id.eq.' + profilDilihat.id + ',author.ilike.' + String(namaPenulis).replace(/[,()]/g, ' ')) : qKarya.ilike('author', namaPenulis);
+            await moderasiSiap;
+            if (!(currentUser && userProfile.isAdmin)) qKarya = saring(qKarya);
             const { data: karyaKreator } = await qKarya;
 
             const myGrid = document.getElementById('my-novels-grid');
@@ -3437,13 +4168,13 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
                         <div class="card-item" onclick="bukaDetailNovel('${n.id}')">
                             <div class="cover-wrapper">
                                 <img src="${coverSrc(n)}" class="cover-img">
-                                <div class="type-badge">${n.category}</div>
+                                <div class="type-badge">${esc(n.category)}</div>
                             </div>
                             <div class="card-info">
-                                <div class="card-title-badge">${n.category}</div>
-                                <span class="card-title">${n.title}</span>
-                                <span class="card-author">${n.author}</span>
-<div class="card-stats"><span><i class="fas fa-eye"></i>${n.total_views || 0}</span><span class="st-star"><i class="fas fa-star"></i>${ratingLabel(n.id)}</span><span><i class="fas fa-layer-group"></i>${n.category}</span></div>
+                                <div class="card-title-badge">${esc(n.category)}</div>
+                                <span class="card-title">${esc(n.title)}</span>
+                                <span class="card-author">${esc(n.author)}</span>
+<div class="card-stats"><span><i class="fas fa-eye"></i>${n.total_views || 0}</span><span class="st-star"><i class="fas fa-star"></i>${ratingLabel(n.id)}</span><span><i class="fas fa-layer-group"></i>${esc(n.category)}</span></div>
                                 <button class="btn-baca">Baca</button>
                             </div>
                         </div>
@@ -3469,8 +4200,13 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             bukaHalaman('halaman-detail-novel');
             activeNovelId = novelId;
 
+            await moderasiSiap;
             const { data: novelData } = await _supabase.from('novels').select('*').eq('id', novelId).single();
             if(!novelData) return;
+            if (!lolosPublik(novelData)) {
+                const boleh = currentUser && (userProfile.isAdmin || novelData.author_id === currentUser.id);
+                if (!boleh) { showToast('Karya ini belum tersedia', 'info'); bukaHalaman('beranda'); return; }
+            }
 
             activeAuthorName = novelData.author;
             activeAuthorId = novelData.author_id || null;
@@ -3479,9 +4215,9 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             document.getElementById('detail-cover').src = coverSrc(novelData);
             document.getElementById('detail-backdrop').style.backgroundImage = `url("${coverSrc(novelData)}")`;
             document.getElementById('detail-title').innerText = novelData.title;
-            document.getElementById('detail-author').innerHTML = `<i class="fas fa-user-circle"></i> Oleh: ${novelData.author} <i class="fas fa-chevron-right" style="font-size:9px;"></i>`;
+            document.getElementById('detail-author').innerHTML = `<i class="fas fa-user-circle"></i> Oleh: ${esc(novelData.author)} <i class="fas fa-chevron-right" style="font-size:9px;"></i>`;
             document.getElementById('detail-category').innerText = novelData.category;
-            document.getElementById('detail-kicker-text').innerText = (novelData.category || 'Novel').toUpperCase();
+            document.getElementById('detail-kicker-text').innerText = (novelData.category || 'Novel').toUpperCase() + (novelData.is_tamat === true ? ' · TAMAT' : (novelData.is_tamat === false ? ' · BERSAMBUNG' : ''));
             document.getElementById('info-author').innerText = novelData.author || '-';
             document.getElementById('info-category').innerText = novelData.category || '-';
             document.getElementById('info-views').innerText = novelData.total_views || 0;
@@ -3556,7 +4292,7 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
         async function bukaBab(novelId, episodeNumber) {
             const { data: ep, error } = await _supabase
                 .from('episodes')
-                .select('*, novels(title)')
+                .select('*, novels(title, category)')
                 .eq('novel_id', novelId)
                 .eq('episode_number', episodeNumber)
                 .single();
@@ -3570,8 +4306,8 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             activeEpNumber = episodeNumber;
 
             document.getElementById('reading-title').innerText = ep.novels.title;
-            document.getElementById('reading-ep').innerText = `Bab ${ep.episode_number}: ${ep.title}` + ` · ± ${estimasiMenitBaca(ep.content)} mnt baca`;
-            renderIsiBab(ep.content);
+            document.getElementById('reading-ep').innerText = `Bab ${ep.episode_number}: ${ep.title}` + (Array.isArray(ep.panels) && ep.panels.length ? ` · ${ep.panels.length} panel` : ` · ± ${estimasiMenitBaca(ep.content)} mnt baca`);
+            renderBab(ep);
             document.body.classList.remove('imersif');
 
             bukaHalaman('baca-pdf');
@@ -3657,9 +4393,10 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
             document.getElementById('nama-kategori-header').innerText = kategori;
             bukaHalaman('halaman-kategori');
 
-            const { data: karya, error } = await _supabase
+            await moderasiSiap;
+            const { data: karya, error } = await saring(_supabase
                 .from('novels')
-                .select('*')
+                .select('*'))
                 .eq('category', kategori);
 
             const grid1 = document.getElementById('kategori-rekomendasi-grid');
@@ -3674,13 +4411,13 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
                 <div class="card-item" onclick="bukaDetailNovel('${n.id}')">
                     <div class="cover-wrapper">
                         <img src="${coverSrc(n)}" class="cover-img">
-                        <div class="type-badge">${n.category}</div>
+                        <div class="type-badge">${esc(n.category)}</div>
                     </div>
                     <div class="card-info">
-                        <div class="card-title-badge">${n.category}</div>
-                        <span class="card-title">${n.title}</span>
-                        <span class="card-author">${n.author}</span>
-<div class="card-stats"><span><i class="fas fa-eye"></i>${n.total_views || 0}</span><span class="st-star"><i class="fas fa-star"></i>${ratingLabel(n.id)}</span><span><i class="fas fa-layer-group"></i>${n.category}</span></div>
+                        <div class="card-title-badge">${esc(n.category)}</div>
+                        <span class="card-title">${esc(n.title)}</span>
+                        <span class="card-author">${esc(n.author)}</span>
+<div class="card-stats"><span><i class="fas fa-eye"></i>${n.total_views || 0}</span><span class="st-star"><i class="fas fa-star"></i>${ratingLabel(n.id)}</span><span><i class="fas fa-layer-group"></i>${esc(n.category)}</span></div>
                         <button class="btn-baca">Lihat</button>
                     </div>
                 </div>
@@ -3699,9 +4436,10 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
                 return;
             }
 
-            const { data: results } = await _supabase
+            await moderasiSiap;
+            const { data: results } = await saring(_supabase
                 .from('novels')
-                .select('*')
+                .select('*'))
                 .ilike('title', `%${query}%`);
 
             if (!results || results.length === 0) {
@@ -3713,13 +4451,13 @@ body[data-page="baca-pdf"] .reader-header,body[data-page="baca-pdf"] .reader-con
                 <div class="card-item" onclick="bukaDetailNovel('${n.id}')">
                     <div class="cover-wrapper">
                         <img src="${coverSrc(n)}" class="cover-img">
-                        <div class="type-badge">${n.category}</div>
+                        <div class="type-badge">${esc(n.category)}</div>
                     </div>
                     <div class="card-info">
-                        <div class="card-title-badge">${n.category}</div>
-                        <span class="card-title">${n.title}</span>
-                        <span class="card-author">Karya: ${n.author}</span>
-<div class="card-stats"><span><i class="fas fa-eye"></i>${n.total_views || 0}</span><span class="st-star"><i class="fas fa-star"></i>${ratingLabel(n.id)}</span><span><i class="fas fa-layer-group"></i>${n.category}</span></div>
+                        <div class="card-title-badge">${esc(n.category)}</div>
+                        <span class="card-title">${esc(n.title)}</span>
+                        <span class="card-author">Karya: ${esc(n.author)}</span>
+<div class="card-stats"><span><i class="fas fa-eye"></i>${n.total_views || 0}</span><span class="st-star"><i class="fas fa-star"></i>${ratingLabel(n.id)}</span><span><i class="fas fa-layer-group"></i>${esc(n.category)}</span></div>
                         <button class="btn-baca">Lihat Detail</button>
                     </div>
                 </div>
