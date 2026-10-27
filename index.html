@@ -1346,12 +1346,155 @@ html[data-theme="dark"] .rp-field textarea,html[data-theme="dark"] .rp-field inp
 #textContentContainer[data-kat="prosedur"] p,#textContentContainer[data-kat="komik"] p{text-indent:0;text-align:left;margin:0 0 6px;hyphens:none;-webkit-hyphens:none}
 #textContentContainer[data-kat="prosedur"] p::first-letter,#textContentContainer[data-kat="komik"] p::first-letter{float:none;font-size:inherit;line-height:inherit;font-weight:inherit;padding:0;color:inherit}
 
+
+/* =====================================================================
+   V14 - TRANSISI HALAMAN (ringan: hanya transform + opacity), PENCARIAN PENGGUNA, PROFIL GAYA INSTAGRAM
+   ===================================================================== */
+.page-view{animation:none}
+.page-view.pg-in-r{animation:pgInR .32s cubic-bezier(.2,.8,.2,1) both}
+.page-view.pg-in-l{animation:pgInL .32s cubic-bezier(.2,.8,.2,1) both}
+.page-view.pg-fade{animation:pgFade .2s ease-out both}
+@keyframes pgInR{from{opacity:0;transform:translate3d(26px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes pgInL{from{opacity:0;transform:translate3d(-26px,0,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes pgFade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.page-view.pg-in-r,.page-view.pg-in-l,.page-view.pg-fade{animation:none}}
+
+/* pencarian pengguna */
+.usr-list{display:flex;flex-direction:column;gap:8px;padding-bottom:24px}
+.usr-row{display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;border:0;border-radius:18px;background:var(--surface);border:1px solid var(--line);text-align:left;font-family:inherit;color:var(--text);cursor:pointer;transition:transform .2s}
+.usr-row:active{transform:scale(.98)}
+.usr-av{width:46px;height:46px;border-radius:50%;object-fit:cover;flex:none;background:#dbe4f3}
+.usr-txt{flex:1;min-width:0;display:flex;flex-direction:column}
+.usr-txt b{font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.usr-txt small{font-size:12px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.usr-crown{color:#f5b301;font-size:14px}
+.usr-empty{font-size:13px;color:var(--muted);text-align:center;padding:24px 8px}
+#segCari{margin:12px 0 4px}
+
+/* profil gaya Instagram: foto kiri, angka kanan */
+#akun .ig-top{display:flex;align-items:center;gap:16px;padding:6px 18px 0}
+#akun .ig-top .avatar-wrap{margin:0;width:88px;height:88px;flex:none}
+#akun .ig-top .av-sparks{inset:-10px}
+#akun .profile-stats-row{flex:1;display:flex;justify-content:space-around;gap:2px;padding:0;margin:0;min-width:0}
+#akun .profile-stats-row .stat-box{background:none;border:0;box-shadow:none;padding:0;min-width:0;display:flex;flex-direction:column;align-items:center;flex:1}
+#akun .stat-num{font-size:18px;font-weight:800;line-height:1.1}
+#akun .stat-txt{font-size:11px;color:var(--muted);text-align:center;line-height:1.25}
+#akun .profile-name,#akun .profile-username,#akun .profile-bio,#akun .tier-progress{text-align:left;padding:0 18px;justify-content:flex-start;align-items:center}
+#akun .profile-name{margin:12px 0 0;font-size:16px;font-weight:800;display:flex;flex-wrap:wrap;gap:8px}
+#akun .profile-username{font-size:13px;color:var(--muted);margin-top:2px}
+#akun .profile-bio{font-size:14px;line-height:1.5;margin-top:6px;color:var(--text-2)}
+#akun .creator-badge{font-size:9.5px}
+#akun .bio-menu-btn,#akun .btn-follow,#akun .btn-login-cta{margin:10px 0 0 18px}
+#akun .tier-progress{margin:8px 0 0 18px;max-width:none;padding:0 18px 0 0}
+#akun .btn-back-profile{margin-left:18px}
+
+#akun .tiktok-profile{text-align:left}
+#akun .bio-menu-btn,#akun .btn-follow,#akun .btn-login-cta{display:inline-flex;align-items:center;justify-content:center}
+
+/* =====================================================================
+   V15 - LAYOUT RATA TENGAH, NAVBAR PILL + TOMBOL CARI TERPISAH, LONCENG MODERASI
+   ===================================================================== */
+html,body{overflow-x:hidden;max-width:100%}
+body{display:block}
+.container,.page-view{width:100%;max-width:520px;margin-left:auto!important;margin-right:auto!important}
+#cari.page-view.active-page{width:100%;max-width:520px}
+#cari .search-bar-wrapper{width:100%}
+#cari .search-results-scroll{width:100%;margin-left:0!important;margin-right:0!important}
+#cari .category-scroll{width:100%}
+.app-header{width:100%}
+
+/* pill navbar: 4 menu + lingkaran cari di kanan */
+.bottom-nav{left:14px!important;right:auto!important;transform:none!important;width:calc(100% - 14px - 14px - 62px - 10px)!important;max-width:none;bottom:max(14px,env(safe-area-inset-bottom))!important;grid-template-columns:repeat(var(--cols,4),minmax(0,1fr))}
+.lens-inner{grid-template-columns:repeat(var(--cols,4),minmax(0,1fr))}
+.bottom-nav .nav-item[hidden],.lens-inner .nav-item[hidden]{display:none!important}
+@media(max-width:360px){.bottom-nav{width:calc(100% - 14px - 14px - 58px - 8px)!important}}
+.nav-search{position:fixed;right:14px;bottom:max(14px,env(safe-area-inset-bottom));width:62px;height:62px;border-radius:50%;border:0;z-index:1001;
+  display:grid;place-items:center;font-size:19px;color:var(--text-2);cursor:pointer;
+  background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(236,242,252,.92));box-shadow:0 10px 26px rgba(15,23,42,.16),inset 0 1px 0 #fff,0 0 0 .5px rgba(15,23,42,.10);
+  transition:transform .3s cubic-bezier(.3,1.4,.5,1)}
+.nav-search:active{transform:scale(.92)}
+body[data-page="cari"] .nav-search{color:var(--blue)}
+html[data-theme="dark"] .nav-search{background:linear-gradient(180deg,rgba(104,116,142,.96),rgba(62,71,94,.97));box-shadow:0 10px 26px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.3);color:#e3e8f2}
+body[data-page="halaman-detail-novel"] .nav-search,body[data-page="baca-pdf"] .nav-search{display:none}
+
+/* lonceng notifikasi moderasi (khusus admin), pojok kiri atas */
+.bell-btn{position:fixed;left:14px;top:calc(12px + env(safe-area-inset-top));width:44px;height:44px;border-radius:50%;border:0;z-index:950;display:none;
+  place-items:center;cursor:pointer;color:var(--text-2);
+  background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(236,242,252,.92));box-shadow:0 8px 20px rgba(15,23,42,.14),inset 0 1px 0 #fff,0 0 0 .5px rgba(15,23,42,.10);
+  transition:transform .3s cubic-bezier(.3,1.4,.5,1)}
+body.is-admin .bell-btn{display:grid}
+.bell-btn:active{transform:scale(.9)}
+.bell-btn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+body[data-page="moderasi"] .bell-btn{color:var(--blue)}
+html[data-theme="dark"] .bell-btn{background:linear-gradient(180deg,rgba(104,116,142,.96),rgba(62,71,94,.97));box-shadow:0 8px 20px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.3);color:#e3e8f2}
+.bell-badge{position:absolute;top:-3px;right:-3px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;display:grid;place-items:center;font-size:11px;font-weight:800;color:#fff;
+  background:linear-gradient(180deg,#FF6B5F,#FF3B30);box-shadow:0 0 0 2px var(--bg-main),0 3px 8px rgba(255,59,48,.45)}
+.bell-badge[hidden]{display:none}
+body[data-page="halaman-detail-novel"] .bell-btn,body[data-page="baca-pdf"] .bell-btn{display:none}
+
+body.is-admin .page-view:not(#halaman-detail-novel):not(#baca-pdf){padding-top:calc(64px + env(safe-area-inset-top))}
+
+/* =====================================================================
+   V17 - LIQUID GLASS LEBIH BENING & REALISTIS, CARI TERPISAH, LONCENG IKUT HALAMAN, TOMBOL KEMBALI
+   ===================================================================== */
+html{--g-fill-a:rgba(255,255,255,.30);--g-fill-b:rgba(255,255,255,.08);
+  --g-blur:blur(11px) saturate(200%) brightness(1.06) contrast(1.03);
+  --g-rim:inset 0 0 0 1px rgba(255,255,255,.55),inset 0 1.5px 1px rgba(255,255,255,.95),inset 0 -1.5px 2px rgba(255,255,255,.45),inset 6px 0 12px -8px rgba(255,255,255,.85),inset -6px 0 12px -8px rgba(255,255,255,.85),0 0 0 .5px rgba(15,23,42,.10),0 14px 34px rgba(15,23,42,.13),0 2px 6px rgba(15,23,42,.06)}
+html[data-theme="dark"]{--g-fill-a:rgba(255,255,255,.13);--g-fill-b:rgba(255,255,255,.04);
+  --g-blur:blur(12px) saturate(190%) brightness(.98) contrast(1.04);
+  --g-rim:inset 0 0 0 1px rgba(255,255,255,.20),inset 0 1.5px 1px rgba(255,255,255,.55),inset 0 -1.5px 2px rgba(255,255,255,.14),inset 6px 0 12px -8px rgba(255,255,255,.4),inset -6px 0 12px -8px rgba(255,255,255,.4),0 0 0 .5px rgba(0,0,0,.5),0 16px 38px rgba(0,0,0,.45)}
+
+/* pill navbar */
+html .bottom-nav,html.lg-refract .bottom-nav,html[data-theme="dark"] .bottom-nav,html[data-theme="dark"].lg-refract .bottom-nav{
+  background:linear-gradient(180deg,var(--g-fill-a),var(--g-fill-b))!important;
+  -webkit-backdrop-filter:var(--g-blur)!important;backdrop-filter:var(--g-blur)!important;
+  box-shadow:var(--g-rim)!important;border:0!important}
+.bottom-nav::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
+  background:radial-gradient(120% 90% at 18% -20%,rgba(255,255,255,.55),transparent 55%),radial-gradient(90% 80% at 92% 125%,rgba(255,255,255,.28),transparent 55%)}
+html[data-theme="dark"] .bottom-nav::before{background:radial-gradient(120% 90% at 18% -20%,rgba(255,255,255,.22),transparent 55%),radial-gradient(90% 80% at 92% 125%,rgba(255,255,255,.10),transparent 55%)}
+.bottom-nav .nav-item{z-index:1}
+
+/* lensa lebih bening (tetap cukup pekat supaya ikon tidak dobel) */
+html{--lens-fill:linear-gradient(180deg,rgba(255,255,255,.88),rgba(222,235,255,.80));
+  --lens-shadow:0 6px 18px rgba(31,111,235,.18),inset 0 0 0 1px rgba(255,255,255,.7),inset 0 1.5px 1px #fff,inset 0 -1px 1px rgba(31,111,235,.12),0 0 0 .5px rgba(15,23,42,.08)}
+html[data-theme="dark"]{--lens-fill:linear-gradient(180deg,rgba(120,132,160,.80),rgba(66,76,102,.82));
+  --lens-shadow:0 8px 22px rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,255,255,.22),inset 0 1.5px 1px rgba(255,255,255,.5),inset 0 -1px 1px rgba(0,0,0,.25)}
+
+/* tombol Cari: kapsul kaca terpisah */
+html .nav-search,html[data-theme="dark"] .nav-search{width:62px;height:62px;border:0;
+  background:linear-gradient(180deg,var(--g-fill-a),var(--g-fill-b))!important;
+  -webkit-backdrop-filter:var(--g-blur)!important;backdrop-filter:var(--g-blur)!important;
+  box-shadow:var(--g-rim)!important;overflow:hidden}
+.nav-search::before{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;
+  background:radial-gradient(110% 90% at 22% -18%,rgba(255,255,255,.6),transparent 58%),radial-gradient(80% 70% at 85% 122%,rgba(255,255,255,.3),transparent 58%)}
+html[data-theme="dark"] .nav-search::before{background:radial-gradient(110% 90% at 22% -18%,rgba(255,255,255,.24),transparent 58%),radial-gradient(80% 70% at 85% 122%,rgba(255,255,255,.1),transparent 58%)}
+.nav-search i{position:relative;z-index:1}
+
+/* lonceng: solid dan ikut tergulir bersama halaman (tidak menempel di layar) */
+body{position:relative}
+.bell-btn{position:absolute!important;left:14px;top:calc(12px + env(safe-area-inset-top));background:#ffffff!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border:.5px solid rgba(15,23,42,.10)}
+html[data-theme="dark"] .bell-btn{background:#1c2130!important;border-color:rgba(255,255,255,.12)}
+body[data-page="moderasi"] .bell-btn{display:none!important}
+
+/* tombol kembali ala iOS 26 (kapsul kaca), juga ikut tergulir */
+.back-btn{display:none;position:absolute;left:14px;top:calc(12px + env(safe-area-inset-top));height:42px;padding:0 16px 0 10px;border:0;border-radius:999px;z-index:951;
+  align-items:center;gap:4px;cursor:pointer;font-family:inherit;font-size:16px;font-weight:600;color:var(--blue);overflow:hidden;
+  background:linear-gradient(180deg,var(--g-fill-a),var(--g-fill-b));-webkit-backdrop-filter:var(--g-blur);backdrop-filter:var(--g-blur);box-shadow:var(--g-rim);
+  transition:transform .3s cubic-bezier(.3,1.4,.5,1)}
+.back-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.back-btn:active{transform:scale(.94)}
+body[data-page="moderasi"] .back-btn{display:inline-flex}
+html[data-theme="dark"] .back-btn{color:#6FB0FF}
+
     </style>
 </head>
 <body data-page="beranda">
 
     <!-- WADAH TOAST NOTIFICATION -->
     <div id="toast-container"></div>
+
+    <button type="button" class="back-btn" id="backMod" onclick="kembaliDariModerasi()" aria-label="Kembali"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>Kembali</button>
+    <button type="button" class="bell-btn" id="bellBtn" onclick="bukaModerasiDariBell()" aria-label="Moderasi dan notifikasi"></button>
 
     <!-- ================= 1. HALAMAN BERANDA ================= -->
     <div id="beranda" class="container page-view active-page">
@@ -1589,10 +1732,18 @@ html[data-theme="dark"] .rp-field textarea,html[data-theme="dark"] .rp-field inp
                 <i class="fas fa-chevron-left"></i> Kembali
             </button>
 
+            <div class="ig-top">
             <div class="avatar-wrap">
                 <img id="profile-page-avatar" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%233B8BFF%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%2322C55E%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22url%28%23g%29%22%2F%3E%3Ctext%20x%3D%2250%22%20y%3D%2266%22%20font-family%3D%22-apple-system%2CArial%2Csans-serif%22%20font-size%3D%2248%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%20text-anchor%3D%22middle%22%3EW%3C%2Ftext%3E%3C%2Fsvg%3E" class="profile-avatar" alt="Profil">
                 <span class="av-sparks" aria-hidden="true"><b style="--a:0deg;--d:0.0s"></b><b style="--a:60deg;--d:0.4s"></b><b style="--a:120deg;--d:0.9s"></b><b style="--a:180deg;--d:1.3s"></b><b style="--a:240deg;--d:1.7s"></b><b style="--a:300deg;--d:2.1s"></b></span>
                 <button type="button" class="avatar-cam" onclick="pilihFotoProfil()" aria-label="Ganti foto profil"><i class="fas fa-camera"></i></button>
+            </div>
+            <div class="profile-stats-row">
+                <div class="stat-box"><span class="stat-num" id="profile-followers-count">0</span><span class="stat-txt">Pengikut</span></div>
+                <div class="stat-box"><span class="stat-num" id="profile-karya-count">0</span><span class="stat-txt">Karya</span></div>
+                <div class="stat-box" id="stat-box-fav-wrapper"><span class="stat-num" id="fav-count-display">0</span><span class="stat-txt">Favorit</span></div>
+                <div class="stat-box"><span class="stat-num" id="profile-total-fav-karya">0</span><span class="stat-txt">Total Fav Karya</span></div>
+            </div>
             </div>
             <div class="profile-name">
                 <span id="profile-page-name">Memuat...</span>
@@ -1606,13 +1757,6 @@ html[data-theme="dark"] .rp-field textarea,html[data-theme="dark"] .rp-field inp
             <button type="button" class="btn-login-cta" id="btnLoginCta" onclick="keLogin()"><i class="fas fa-right-to-bracket"></i> Masuk / Daftar</button>
             <div class="tier-progress" id="tier-progress" style="display:none"></div>
             
-            <div class="profile-stats-row">
-                <div class="stat-box"><span class="stat-num" id="profile-followers-count">0</span><span class="stat-txt">Pengikut</span></div>
-                <div class="stat-box"><span class="stat-num" id="profile-karya-count">0</span><span class="stat-txt">Karya</span></div>
-                <div class="stat-box" id="stat-box-fav-wrapper"><span class="stat-num" id="fav-count-display">0</span><span class="stat-txt">Favorit</span></div>
-                <div class="stat-box"><span class="stat-num" id="profile-total-fav-karya">0</span><span class="stat-txt">Total Fav Karya</span></div>
-            </div>
-
             <!-- Menu Tab ala TikTok di Bawah Profil -->
             <div class="tiktok-tabs" id="tiktok-tabs-container">
                 <div class="tiktok-tab-item active" onclick="gantiTabAkun(this, 'tab-karya')"><i class="fas fa-th"></i> Karya Saya</div>
@@ -1960,7 +2104,7 @@ html[data-theme="dark"] .rp-field textarea,html[data-theme="dark"] .rp-field inp
         <a class="nav-item active" data-nav="home" role="button" tabindex="0">
             <i class="fas fa-home"></i><span class="nav-text">Home</span>
         </a>
-        <a class="nav-item" data-nav="cari" role="button" tabindex="0">
+        <a class="nav-item" data-nav="cari" role="button" tabindex="0" hidden>
             <i class="fas fa-search"></i><span class="nav-text">Cari</span>
         </a>
         <a class="nav-item" data-nav="upload" role="button" tabindex="0">
@@ -1976,6 +2120,7 @@ html[data-theme="dark"] .rp-field textarea,html[data-theme="dark"] .rp-field inp
             <i class="fas fa-user"></i><span class="nav-text">Profil</span>
         </a>
     </nav>
+    <button type="button" class="nav-search" id="navSearch" onclick="bukaCariDariNav()" aria-label="Cari"><i class="fas fa-search"></i></button>
 
     <!-- LOGIKA JAVASCRIPT & INTEGRASI SUPABASE -->
     <script>
@@ -2162,7 +2307,12 @@ html[data-theme="dark"] .rp-field textarea,html[data-theme="dark"] .rp-field inp
             const navKey = NAV_MAP[idHalaman];
             if (navKey && window.NavLens) window.NavLens.setActive(navKey);
 
+            const dariHalaman = window.__halamanAktif || 'beranda';
+            window.__halamanAktif = idHalaman;
             targetPage.classList.add('active-page');
+            targetPage.classList.remove('pg-in-r', 'pg-in-l', 'pg-fade');
+            void targetPage.offsetWidth;
+            targetPage.classList.add(animasiPindah(dariHalaman, idHalaman));
             if (idHalaman === 'donasi' && typeof muatHalamanDonasi === 'function') muatHalamanDonasi();
             if (idHalaman === 'moderasi' && typeof muatModerasi === 'function') muatModerasi();
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2682,7 +2832,7 @@ html[data-theme="dark"] .rp-field textarea,html[data-theme="dark"] .rp-field inp
                 S.key = key;
                 semua.forEach(i => i.classList.toggle('active', i.dataset.nav === key));
                 if (!ready || S.drag || S.peek) return;
-                const i = idxOf(key); if (i < 0) return;
+                const i = idxOf(key); lens.classList.toggle('ready', ready && i >= 0); if (i < 0) return;
                 S.t = xs[i]; kick();
             }
             function peek(on) {
@@ -3758,6 +3908,13 @@ html[data-theme="dark"] .rp-field textarea,html[data-theme="dark"] .rp-field inp
         }
         async function prosesUnggah() {
             if (!currentUser) { wajibLogin('Masuk dulu untuk mengunggah karya'); return; }
+            const { data: dataSesi, error: errSesi } = await _supabase.auth.getUser();
+            if (errSesi || !dataSesi || !dataSesi.user) {
+                showToast('Sesi login sudah habis. Silakan login ulang.', 'error');
+                setTimeout(keLogin, 900);
+                return;
+            }
+            const idPemilik = dataSesi.user.id;
             const mode = modeUpload;
             const kategori = kategoriAktif();
             const komik = kategori === 'Komik';
@@ -3806,7 +3963,7 @@ html[data-theme="dark"] .rp-field textarea,html[data-theme="dark"] .rp-field inp
                         posterUrl = hasil.url;
                         if (hasil.via === 'inline') showToast("Cover tersimpan versi ringan (bucket 'posters' belum siap)", 'info');
                     }
-                    const baris = { title: judul, author: penulis, category: kategori, poster_url: posterUrl || '', author_id: currentUser.id, synopsis: sinopsis };
+                    const baris = { title: judul, author: penulis, category: kategori, poster_url: posterUrl || '', author_id: idPemilik, synopsis: sinopsis };
                     if (tamatDipilih) baris.is_tamat = true;
                     const { data: novelBaru, error: errNovel } = await _supabase.from('novels').insert([baris]).select().single();
                     if (errNovel) throw errNovel;
@@ -3843,12 +4000,105 @@ html[data-theme="dark"] .rp-field textarea,html[data-theme="dark"] .rp-field inp
                 muatDataAkunSaya();
             } catch (err) {
                 console.error(err);
-                showToast('Terjadi kesalahan: ' + (err.message || err), 'error');
+                const pesanErr = (err && err.message) || String(err);
+                if (/author_id_fkey|foreign key/i.test(pesanErr)) {
+                    showToast('Akun login tidak cocok dengan database. Keluar akun lalu login ulang.', 'error');
+                    try { await _supabase.auth.signOut(); } catch (e2) { }
+                } else {
+                    showToast('Terjadi kesalahan: ' + pesanErr, 'error');
+                }
             } finally {
                 btn.disabled = false;
                 btn.innerText = 'Simpan & Publikasikan';
             }
         }
+
+        // ====== V14: transisi halaman, pencarian pengguna ======
+        const URUTAN_TAB = ['beranda', 'cari', 'moderasi', 'donasi', 'akun'];
+        function animasiPindah(dari, ke) {
+            if (!dari || dari === ke) return 'pg-fade';
+            const a = URUTAN_TAB.indexOf(dari), b = URUTAN_TAB.indexOf(ke);
+            if (a >= 0 && b >= 0) return b > a ? 'pg-in-r' : 'pg-in-l';
+            if (a >= 0 && b < 0) return 'pg-in-r';   // masuk ke detail / pembaca
+            if (a < 0 && b >= 0) return 'pg-in-l';   // kembali ke tab utama
+            return 'pg-fade';
+        }
+        let segCari = 'karya';
+        function gantiSegCari(s) {
+            segCari = s;
+            const seg = document.getElementById('segCari');
+            seg.dataset.pos = s === 'karya' ? '0' : '1';
+            seg.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.dataset.s === s); });
+            cariKarya();
+        }
+        async function cariPengguna() {
+            const box = document.getElementById('search-results-container');
+            box.className = 'usr-list';
+            const q = (document.getElementById('searchInput').value || '').trim().replace(/[%_,()*\\]/g, ' ');
+            if (!q) { box.innerHTML = '<p class="usr-empty">Ketik nama atau @username kreator untuk mencari pengguna.</p>'; return; }
+            box.innerHTML = '<p class="usr-empty">Mencari...</p>';
+            const { data, error } = await _supabase.from('profiles')
+                .select('id,username,display_name,avatar_url,is_admin,followers_count')
+                .or('display_name.ilike.%' + q + '%,username.ilike.%' + q + '%')
+                .order('followers_count', { ascending: false }).limit(30);
+            if (error) { box.innerHTML = '<p class="usr-empty">Gagal mencari: ' + esc(error.message) + '</p>'; return; }
+            if (!data || !data.length) { box.innerHTML = '<p class="usr-empty">Pengguna tidak ditemukan.</p>'; return; }
+            box.innerHTML = data.map(function (p) {
+                return '<button type="button" class="usr-row" onclick="bukaProfilPengguna(\'' + esc(p.id) + '\', this)" data-nama="' + esc(p.display_name) + '">' +
+                    '<img class="usr-av" src="' + esc(avatarSrc(p.avatar_url, p.display_name)) + '" alt="">' +
+                    '<span class="usr-txt"><b>' + esc(p.display_name) + '</b><small>@' + esc(p.username) + ' · ' + (p.followers_count || 0) + ' pengikut</small></span>' +
+                    (p.is_admin ? '<i class="fas fa-crown usr-crown"></i>' : '') + '</button>';
+            }).join('');
+        }
+        function bukaProfilPengguna(id, el) {
+            const nama = el && el.dataset ? el.dataset.nama : '';
+            bukaProfilKreatorFromAuthor(nama, id);
+        }
+        const _cariKaryaV13 = cariKarya;
+        cariKarya = function () {
+            if (segCari === 'pengguna') return cariPengguna();
+            const box = document.getElementById('search-results-container');
+            if (box && box.classList.contains('usr-list')) box.className = 'rekomendasi-grid';
+            return _cariKaryaV13.apply(this, arguments);
+        };
+        document.addEventListener('DOMContentLoaded', function () {
+            const cari = document.getElementById('cari');
+            const wrap = cari && cari.querySelector('.search-results-scroll');
+            if (wrap && !document.getElementById('segCari')) {
+                const seg = document.createElement('div');
+                seg.className = 'glass-seg'; seg.id = 'segCari'; seg.dataset.pos = '0';
+                seg.innerHTML = '<span class="seg-pill"></span><button type="button" class="on" data-s="karya" onclick="gantiSegCari(\'karya\')">Karya</button><button type="button" data-s="pengguna" onclick="gantiSegCari(\'pengguna\')">Pengguna</button>';
+                wrap.parentNode.insertBefore(seg, wrap);
+            }
+        });
+
+        // ====== V15: lonceng moderasi, tombol cari terpisah ======
+        const BELL_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9.5a6 6 0 0 1 12 0c0 4.6 1.8 6.4 2.3 7H3.7c.5-.6 2.3-2.4 2.3-7z"/><path d="M10 19.5a2 2 0 0 0 4 0"/></svg>';
+        function aturNavAdmin() {
+            const admin = !!(currentUser && userProfile.isAdmin && MODERASI_AKTIF);
+            document.body.classList.toggle('is-admin', admin);
+            if (window.NavLens && window.NavLens.setVisible) window.NavLens.setVisible('moderasi', false);
+            if (admin) ambilJumlahModerasi();
+            else {
+                setBadgeNav(0);
+                const p = document.getElementById('moderasi');
+                if (p && p.classList.contains('active-page')) bukaHalaman('beranda');
+            }
+        }
+        function setBadgeNav(n) {
+            const b = document.querySelector('#bellBtn .bell-badge');
+            if (b) { b.textContent = n > 99 ? '99+' : n; b.hidden = !(n > 0); }
+        }
+        function bukaModerasiDariBell() { window.__dariModerasi = window.__halamanAktif || 'beranda'; bukaHalaman('moderasi'); }
+        function kembaliDariModerasi() {
+            const tujuan = ['beranda', 'cari', 'donasi', 'akun'].indexOf(window.__dariModerasi) >= 0 ? window.__dariModerasi : 'beranda';
+            bukaHalaman(tujuan);
+        }
+        function bukaCariDariNav() { bukaHalaman('cari'); }
+        document.addEventListener('DOMContentLoaded', function () {
+            const bell = document.getElementById('bellBtn');
+            if (bell) bell.innerHTML = BELL_SVG + '<span class="bell-badge" hidden>0</span>';
+        });
 
         // ====== MODE GELAP ======
         function setTheme(t, animate) {
