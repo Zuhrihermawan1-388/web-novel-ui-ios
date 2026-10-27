@@ -1486,6 +1486,21 @@ body[data-page="moderasi"] .bell-btn{display:none!important}
 body[data-page="moderasi"] .back-btn{display:inline-flex}
 html[data-theme="dark"] .back-btn{color:#6FB0FF}
 
+
+/* =====================================================================
+   V18 - PERBAIKAN PROFIL, LONCENG & TOMBOL KEMBALI
+   ===================================================================== */
+/* tombol Masuk/Daftar: hanya di profil sendiri saat belum login */
+#akun .btn-login-cta{display:none!important}
+#akun.tamu:not(.lihat-orang) .btn-login-cta{display:inline-flex!important}
+
+/* profil orang lain: tombol kembali di alur normal, tidak menutupi foto */
+#akun.lihat-orang #btnKembaliAkunOrang{position:relative!important;top:auto!important;left:auto!important;right:auto!important;margin:14px 18px 4px!important;display:inline-flex!important}
+#akun.lihat-orang .ig-top{margin-top:4px}
+
+/* lonceng hanya di beranda */
+body.is-admin:not([data-page="beranda"]) .bell-btn{display:none!important}
+
     </style>
 </head>
 <body data-page="beranda">
@@ -3731,7 +3746,7 @@ html[data-theme="dark"] .back-btn{color:#6FB0FF}
             const sel = document.getElementById('selectKarya');
             sel.innerHTML = '<option value="">Memuat karya...</option>';
             let q = _supabase.from('novels').select('*').order('created_at', { ascending: false }).limit(300);
-            if (!userProfile.isAdmin) {
+            {
                 const nama = String(userProfile.nama || '').replace(/[,()*%\\]/g, ' ');
                 q = q.or('author_id.eq.' + currentUser.id + ',and(author_id.is.null,author.ilike.' + nama + ')');
             }
@@ -3946,7 +3961,7 @@ html[data-theme="dark"] .back-btn{color:#6FB0FF}
 
                 if (mode === 'bab') {
                     novelId = karyaTerpilih.id;
-                    const sah = userProfile.isAdmin || (karyaTerpilih.author_id
+                    const sah = (karyaTerpilih.author_id
                         ? karyaTerpilih.author_id === currentUser.id
                         : String(karyaTerpilih.author || '').toLowerCase() === penulis.toLowerCase());
                     if (!sah) throw new Error('Kamu bukan pemilik karya ini');
@@ -3963,7 +3978,7 @@ html[data-theme="dark"] .back-btn{color:#6FB0FF}
                         posterUrl = hasil.url;
                         if (hasil.via === 'inline') showToast("Cover tersimpan versi ringan (bucket 'posters' belum siap)", 'info');
                     }
-                    const baris = { title: judul, author: penulis, category: kategori, poster_url: posterUrl || '', author_id: idPemilik, synopsis: sinopsis };
+                    const baris = { title: judul, author: penulis, category: kategori, poster_url: posterUrl || '', synopsis: sinopsis };
                     if (tamatDipilih) baris.is_tamat = true;
                     const { data: novelBaru, error: errNovel } = await _supabase.from('novels').insert([baris]).select().single();
                     if (errNovel) throw errNovel;
@@ -4001,12 +4016,7 @@ html[data-theme="dark"] .back-btn{color:#6FB0FF}
             } catch (err) {
                 console.error(err);
                 const pesanErr = (err && err.message) || String(err);
-                if (/author_id_fkey|foreign key/i.test(pesanErr)) {
-                    showToast('Akun login tidak cocok dengan database. Keluar akun lalu login ulang.', 'error');
-                    try { await _supabase.auth.signOut(); } catch (e2) { }
-                } else {
-                    showToast('Terjadi kesalahan: ' + pesanErr, 'error');
-                }
+                showToast('Gagal menyimpan: ' + pesanErr, 'error');
             } finally {
                 btn.disabled = false;
                 btn.innerText = 'Simpan & Publikasikan';
