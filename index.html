@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="color-scheme" content="light dark">
-    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,700&display=swap" rel="stylesheet">
     <meta name="theme-color" content="#F2F6FC">
     <script>(function(){try{var t=localStorage.getItem('wni_theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==='dark'?'#0C0F16':'#F2F6FC';}catch(e){}})();</script>
     <title>Web Novel Indie</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -2376,7 +2374,23 @@ html[data-theme="dark"] #btnUbahLatar{color:#f2f5fa;background:linear-gradient(1
         function saring(q) { return MODERASI_AKTIF ? q.eq('status', 'approved').eq('is_hidden', false) : q; }
         const lolosPublik = n => !MODERASI_AKTIF || (n.status === 'approved' && !n.is_hidden);
 
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+        // pdf.js dimuat hanya saat dibutuhkan (upload PDF), supaya kunjungan biasa lebih irit kuota
+        let pdfJsSiap = null;
+        function muatPdfJs() {
+            if (window.pdfjsLib) return Promise.resolve();
+            if (pdfJsSiap) return pdfJsSiap;
+            pdfJsSiap = new Promise(function (resolve, reject) {
+                const sc = document.createElement('script');
+                sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js';
+                sc.onload = function () {
+                    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+                    resolve();
+                };
+                sc.onerror = function () { pdfJsSiap = null; reject(new Error('Gagal memuat pdf.js')); };
+                document.head.appendChild(sc);
+            });
+            return pdfJsSiap;
+        }
 
         let filePosterBlob = null;   // cover yang akan diunggah (manual ATAU halaman 1 PDF)
         let coverManual = null;      // cover yang dipilih sendiri lewat input gambar
@@ -2447,6 +2461,7 @@ html[data-theme="dark"] #btnUbahLatar{color:#f2f5fa;background:linear-gradient(1
                     const fileReader = new FileReader();
                     fileReader.onload = async function() {
                         const typedarray = new Uint8Array(this.result);
+                        await muatPdfJs();
                         const pdf = await pdfjsLib.getDocument(typedarray).promise;
 
                         let fullText = "";
@@ -2566,9 +2581,14 @@ html[data-theme="dark"] #btnUbahLatar{color:#f2f5fa;background:linear-gradient(1
             const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 390"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${pal[0]}"/><stop offset="1" stop-color="${pal[1]}"/></linearGradient></defs><rect width="300" height="390" fill="url(#g)"/><circle cx="240" cy="70" r="90" fill="rgba(255,255,255,.12)"/><text x="150" y="228" font-family="Georgia,serif" font-size="130" font-weight="700" fill="rgba(255,255,255,.95)" text-anchor="middle">${ch}</text></svg>`;
             return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
         }
+        // versi penuh (tajam) untuk halaman detail yang menampilkan cover besar
+        function coverPenuh(n) {
+            const u = n && n.poster_url;
+            return (u && !/placeholder\.com/i.test(u)) ? u : coverSrc(n);
+        }
         function coverSrc(n) {
             const u = n && n.poster_url;
-            if (u && !/placeholder\.com/i.test(u)) return u;
+            if (u && !/placeholder\.com/i.test(u)) return /\/posters\/poster_[^/?]+\.(webp|jpg)(\?.*)?$/.test(u) ? u.replace(/\.(webp|jpg)(\?|$)/, '_t.$1$2') : u;
             return coverFallback(n && n.title);
         }
         function avatarSrc(url, name) {
@@ -2682,6 +2702,10 @@ html[data-theme="dark"] #btnUbahLatar{color:#f2f5fa;background:linear-gradient(1
             try {
                 const { error } = await _supabase.storage.from('posters').upload(path, kecil, { contentType: kecil.type || 'image/jpeg', upsert: false });
                 if (error) throw error;
+                try {
+                    const kecilSekali = await optimasiGambar(kecil, { maxSide: 520, maxBytes: 60 * 1024, webp: true, force: true });
+                    await _supabase.storage.from('posters').upload(path.replace(/\.(webp|jpg)$/, '_t.$1'), kecilSekali, { contentType: kecilSekali.type || 'image/jpeg', upsert: false });
+                } catch (eThumb) { console.warn('Thumbnail cover gagal dibuat:', eThumb && eThumb.message); }
                 const { data } = _supabase.storage.from('posters').getPublicUrl(path);
                 if (!data || !data.publicUrl) throw new Error('URL publik tidak tersedia');
                 return { url: data.publicUrl, via: 'storage' };
@@ -4686,6 +4710,15 @@ html[data-theme="dark"] #btnUbahLatar{color:#f2f5fa;background:linear-gradient(1
             akun.appendChild(b);
         });
 
+        // ====== V30: cadangan bila thumbnail belum ada ======
+        document.addEventListener('error', function (e) {
+            const t = e.target;
+            if (t && t.tagName === 'IMG' && /_t\.(webp|jpg)/.test(t.src) && !t.dataset.fb) {
+                t.dataset.fb = '1';
+                t.src = t.src.replace(/_t\.(webp|jpg)/, '.$1');
+            }
+        }, true);
+
         // ====== MODE GELAP ======
         function setTheme(t, animate) {
             const root = document.documentElement;
@@ -5048,8 +5081,8 @@ html[data-theme="dark"] #btnUbahLatar{color:#f2f5fa;background:linear-gradient(1
             activeAuthorId = novelData.author_id || null;
             muatFollowDetail(novelData);
 
-            document.getElementById('detail-cover').src = coverSrc(novelData);
-            document.getElementById('detail-backdrop').style.backgroundImage = `url("${coverSrc(novelData)}")`;
+            document.getElementById('detail-cover').src = coverPenuh(novelData);
+            document.getElementById('detail-backdrop').style.backgroundImage = `url("${coverPenuh(novelData)}")`;
             document.getElementById('detail-title').innerText = novelData.title;
             document.getElementById('detail-author').innerHTML = `<i class="fas fa-user-circle"></i> Oleh: ${esc(novelData.author)} <i class="fas fa-chevron-right" style="font-size:9px;"></i>`;
             document.getElementById('detail-category').innerText = novelData.category;
@@ -5125,7 +5158,17 @@ html[data-theme="dark"] #btnUbahLatar{color:#f2f5fa;background:linear-gradient(1
             if(countLabel) countLabel.innerText = listFavorit.length;
         }
 
+        let fontBacaSiap = false;
+        function muatFontBaca() {
+            if (fontBacaSiap) return;
+            fontBacaSiap = true;
+            const pc = document.createElement('link'); pc.rel = 'preconnect'; pc.href = 'https://fonts.gstatic.com'; pc.crossOrigin = 'anonymous';
+            const l = document.createElement('link'); l.rel = 'stylesheet';
+            l.href = 'https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,700&display=swap';
+            document.head.appendChild(pc); document.head.appendChild(l);
+        }
         async function bukaBab(novelId, episodeNumber) {
+            muatFontBaca();
             simpanPosisiSekarang();
             const { data: ep, error } = await _supabase
                 .from('episodes')
