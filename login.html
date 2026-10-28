@@ -241,7 +241,7 @@
         // ====== PENGATURAN (samakan dengan web utama) ======
         const SUPABASE_URL = "https://rncaoxpzxfigpjrvmykj.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_00SoqgF7YRT0V7ozV4YaFg_Wjdlch0k";
-        const HALAMAN_UTAMA = "Website_baca_V19.html";      // <<< GANTI dengan nama file web utamamu
+        const HALAMAN_UTAMA = "index.html";      // <<< GANTI dengan nama file web utamamu
         const DOMAIN_EMAIL = "wni.app";           // email internal: <username>@wni.app
 
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -250,9 +250,30 @@
 
         function pesan(teks, jenis) { const p = $('pesan'); p.textContent = teks || ''; p.className = 'msg' + (jenis ? ' ' + jenis : ''); }
         function tujuan() {
+            // 1) alamat ?kembali=... (dikirim web utama), 2) halaman asal di domain yang sama, 3) HALAMAN_UTAMA
             const k = new URLSearchParams(location.search).get('kembali');
             try { if (k) { const u = new URL(k, location.href); if (u.origin === location.origin) return u.href; } } catch (e) { }
+            try {
+                if (document.referrer) {
+                    const r = new URL(document.referrer);
+                    if (r.origin === location.origin && r.pathname !== location.pathname) return r.href;
+                }
+            } catch (e) { }
             return HALAMAN_UTAMA;
+        }
+        async function alihkan() {
+            const url = tujuan();
+            try {
+                const r = await fetch(url, { cache: 'no-store' });
+                if (!r.ok) throw new Error('404');
+            } catch (e) {
+                if (String(e.message) === '404') {
+                    pesan('Login berhasil, tapi file "' + HALAMAN_UTAMA + '" tidak ditemukan. Ganti HALAMAN_UTAMA di login.html dengan nama file web utamamu.', 'err');
+                    sibuk(false);
+                    return;
+                }
+            }
+            location.href = url;
         }
         function sibuk(b) { $('btnAuth').disabled = b; }
         function setMode(daftar) {
@@ -270,9 +291,9 @@
             // username -> email internal (username boleh diganti kapan saja)
             const { data: email, error: e1 } = await sb.rpc('login_email', { uname: u });
             if (e1) { console.warn(e1); throw new Error('Server belum siap. Pastikan supabase_tahap2.sql sudah dijalankan.'); }
-            if (!email) throw new Error('Username atau password salah');
+            if (!email) throw new Error('Username "' + u + '" tidak ditemukan');
             const { error } = await sb.auth.signInWithPassword({ email: email, password: p });
-            if (error) throw new Error(/invalid|credentials/i.test(error.message) ? 'Username atau password salah' : error.message);
+            if (error) throw new Error(/invalid|credentials/i.test(error.message) ? 'Password salah untuk akun ini' : error.message);
         }
         async function daftar(u, p) {
             if (!/^[a-z0-9_]{3,24}$/.test(u)) throw new Error('Username 3–24 karakter: huruf kecil, angka, atau _');
@@ -300,7 +321,7 @@
             try {
                 if (modeDaftar) await daftar(u, p); else await masuk(u, p);
                 pesan('Berhasil! Mengalihkan...', 'ok');
-                setTimeout(() => { location.href = tujuan(); }, 500);
+                setTimeout(alihkan, 400);
             } catch (err) { pesan(err.message || 'Terjadi kesalahan', 'err'); sibuk(false); }
         });
         function aktif(el, fn) { el.addEventListener('click', fn); el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); } }); }
@@ -308,7 +329,13 @@
         aktif($('bubLupa'), () => pesan('Lupa password? Hubungi admin untuk direset.', ''));
 
         // sudah login? langsung ke web utama
-        sb.auth.getSession().then(({ data }) => { if (data && data.session) { pesan('Sudah masuk, mengalihkan...', 'ok'); location.replace(tujuan()); } });
+        // Mode tambah akun (?tambah=1) tidak dialihkan walau masih ada sesi aktif
+        const modeTambah = /[?&]tambah=1/.test(location.search);
+        sb.auth.getSession().then(({ data }) => {
+            if (!data || !data.session) return;
+            if (modeTambah) { pesan('Kamu masih masuk sebagai akun lain. Masuk dengan akun yang ingin ditambahkan.', ''); return; }
+            pesan('Sudah masuk, mengalihkan...', 'ok'); alihkan();
+        });
     </script>
 </body>
 </html>
