@@ -320,6 +320,7 @@
             sibuk(true); pesan(modeDaftar ? 'Membuat akun...' : 'Masuk...');
             try {
                 if (modeDaftar) await daftar(u, p); else await masuk(u, p);
+                try { localStorage.setItem('login_baru', String(Date.now())); } catch (e) { }
                 pesan('Berhasil! Mengalihkan...', 'ok');
                 setTimeout(alihkan, 400);
             } catch (err) { pesan(err.message || 'Terjadi kesalahan', 'err'); sibuk(false); }
