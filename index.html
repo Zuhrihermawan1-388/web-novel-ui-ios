@@ -1680,16 +1680,25 @@ html[data-theme="dark"] .idc-stat small{color:#9aa3b5}
 
 
 /* =====================================================================
-   V28 - LATAR PROFIL (blur iOS 26), KARTU SEKALI TAMPIL
+   V29 - LATAR PROFIL SETENGAH TINGGI: gambar tajam, blur hanya di bagian bawah, tombol ubah latar
    ===================================================================== */
 #akun{position:relative}
-.profil-latar{position:absolute;left:0;right:0;top:0;height:300px;z-index:0;overflow:hidden;pointer-events:none;background:linear-gradient(160deg,#3b82f6,#8b5cf6 55%,#f59e0b);transition:opacity .4s}
-.profil-latar-img{position:absolute;inset:-36px;background-size:cover;background-position:center;filter:blur(20px) saturate(150%);transform:scale(1.08);will-change:transform}
-.profil-latar::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.18) 45%,rgba(243,246,252,.92) 88%,var(--bg-main,#f2f6fc) 100%);-webkit-backdrop-filter:blur(16px) saturate(190%) brightness(1.04);backdrop-filter:blur(16px) saturate(190%) brightness(1.04);-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent 100%);mask-image:linear-gradient(180deg,#000 55%,transparent 100%)}
-html[data-theme="dark"] .profil-latar::after{background:linear-gradient(180deg,rgba(12,15,22,.25),rgba(12,15,22,.5) 45%,rgba(12,15,22,.92) 88%,#0c0f16 100%)}
+.profil-latar{position:absolute;left:0;right:0;top:0;height:235px;z-index:0;overflow:hidden;pointer-events:none;background:linear-gradient(160deg,#3b82f6,#8b5cf6 55%,#f59e0b);transition:opacity .4s}
+.profil-latar-img{position:absolute;inset:0;background-size:cover;background-position:center 30%}
+.profil-latar::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(242,246,252,.55) 80%,var(--bg-main,#f2f6fc) 100%)}
+.profil-latar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:62%;background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.12));-webkit-backdrop-filter:blur(14px) saturate(170%);backdrop-filter:blur(14px) saturate(170%);-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 70%);mask-image:linear-gradient(180deg,transparent 0,#000 70%)}
+html[data-theme="dark"] .profil-latar::before{background:linear-gradient(180deg,rgba(12,15,22,0) 35%,rgba(12,15,22,.6) 80%,#0c0f16 100%)}
 .profil-latar:empty{display:none}
 #akun .tiktok-profile{position:relative;z-index:1}
 #akun .tab-content-area,#akun .tiktok-tabs{position:relative;z-index:1}
+#btnUbahLatar{position:absolute;top:14px;right:16px;z-index:3;display:none;align-items:center;gap:7px;height:36px;padding:0 15px;border:0;border-radius:999px;cursor:pointer;
+  font-family:inherit;font-size:13px;font-weight:700;color:#1d1d1f;background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,.55));
+  -webkit-backdrop-filter:blur(16px) saturate(180%);backdrop-filter:blur(16px) saturate(180%);
+  box-shadow:0 8px 20px rgba(15,23,42,.18),inset 0 1px 0 rgba(255,255,255,.95),0 0 0 .5px rgba(15,23,42,.10);transition:transform .25s cubic-bezier(.3,1.4,.5,1)}
+#btnUbahLatar i{font-size:12px;color:#0a84ff}
+#btnUbahLatar:active{transform:scale(.94)}
+#akun:not(.tamu):not(.lihat-orang) #btnUbahLatar{display:inline-flex}
+html[data-theme="dark"] #btnUbahLatar{color:#f2f5fa;background:linear-gradient(180deg,rgba(110,120,146,.7),rgba(40,46,62,.6));box-shadow:0 8px 20px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.25)}
     </style>
 </head>
 <body data-page="beranda">
@@ -4664,6 +4673,18 @@ html[data-theme="dark"] .profil-latar::after{background:linear-gradient(180deg,r
             const d = await ambilDataKartu();
             tampilkanOverlayKartu('otomatis', d);
         }
+
+
+        // ====== V29: tombol ubah latar di pojok kanan atas ======
+        document.addEventListener('DOMContentLoaded', function () {
+            const akun = document.getElementById('akun');
+            if (!akun || document.getElementById('btnUbahLatar')) return;
+            const b = document.createElement('button');
+            b.type = 'button'; b.id = 'btnUbahLatar'; b.setAttribute('aria-label', 'Ubah latar belakang');
+            b.innerHTML = '<i class="fas fa-pen"></i>Ubah Latar Belakang';
+            b.onclick = pilihLatarProfil;
+            akun.appendChild(b);
+        });
 
         // ====== MODE GELAP ======
         function setTheme(t, animate) {
