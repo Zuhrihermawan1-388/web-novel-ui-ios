@@ -1544,6 +1544,57 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
   scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-x;scroll-snap-type:x proximity}
 #reader-settings-panel .settings-options::-webkit-scrollbar{display:none}
 #reader-settings-panel .settings-options>*{flex:none;scroll-snap-align:start;white-space:nowrap}
+
+/* =====================================================================
+   V21 - KOMIK: PANEL LEBIH KECIL, JARAK LEGA, BUBBLE TIDAK MENUTUPI GAMBAR
+   ===================================================================== */
+.komik-halaman{width:88%;margin:0 auto;gap:28px}
+.kr{gap:16px;align-items:flex-start}
+.kr-1{justify-content:center}
+.kr-1 .kp{flex:0 0 78%;margin:0 auto}
+.kp-bubble.over{position:static;max-width:none;margin-top:14px;z-index:auto}
+.kp-bubble.under{margin-top:14px}
+.kp-bubble.under::after{display:none}
+.kp-bubble{box-shadow:2px 2px 0 #111}
+.kp-bubble::before{content:"";position:absolute;top:-11px;width:14px;height:14px;background:#fff;border-left:2.5px solid #111;border-top:2.5px solid #111;transform:rotate(45deg)}
+.kp-bubble.l::before{left:22px}
+.kp-bubble.r::before{right:22px}
+.kr-3 .kp-shape{aspect-ratio:3/4}
+
+
+/* =====================================================================
+   V22 - TITLE BARU: PREMIUM CREATOR (10K+), CENTANG BIRU (1K+), DEVELOPER (ADMIN)
+   ===================================================================== */
+.creator-badge.tt-verified{background:none;box-shadow:none;padding:0;width:22px;height:22px;display:inline-grid;place-items:center;border:0;overflow:visible;animation:verPop .5s cubic-bezier(.3,1.5,.5,1) both}
+.creator-badge.tt-verified svg{width:22px;height:22px;filter:drop-shadow(0 2px 4px rgba(29,155,240,.35))}
+@keyframes verPop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* PREMIUM CREATOR: emas berputar, kilau berjalan, percikan, mahkota melayang */
+.creator-badge.tt-premium{font-size:11px;letter-spacing:1.8px;padding:6px 16px 6px 12px;color:#fff3c4;
+  background:linear-gradient(110deg,#3a2600,#8a5a00 40%,#ffd76a 50%,#8a5a00 60%,#3a2600);background-size:250% 100%;animation:ttFlow 4s linear infinite;
+  box-shadow:0 0 0 1px rgba(255,214,106,.65),0 0 22px rgba(255,190,70,.55),0 8px 22px rgba(0,0,0,.35)}
+.creator-badge.tt-premium::before{content:"";position:absolute;inset:-2px;border-radius:inherit;z-index:-1;padding:2px;background:conic-gradient(from 0deg,#fff1b8,#c98a10,#fff8d6,#e6a817,#fff1b8);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:ttSpin 3s linear infinite}
+.creator-badge.tt-premium span{background:linear-gradient(90deg,#fff6cf,#ffffff,#ffd34d,#ffffff,#fff6cf);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:ttFlow 2.6s linear infinite}
+.creator-badge.tt-premium i{color:#ffd24a;filter:drop-shadow(0 0 6px rgba(255,200,60,.95));animation:ttFloat 2.8s ease-in-out infinite}
+.creator-badge.tt-premium::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-45%;z-index:2;pointer-events:none;background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent);animation:ttSweep 2.8s ease-in-out infinite}
+.creator-badge .spk{position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:0 0 6px 2px rgba(255,220,120,.95);z-index:3;animation:ttTwinkle 2s ease-in-out infinite;animation-delay:var(--d,0s);left:var(--x);top:var(--y)}
+
+/* DEVELOPER (ADMIN): pelangi holografik berputar, kartu kaca gelap, mahkota platinum */
+.creator-badge.tt-admin{font-size:11px;letter-spacing:2px;padding:7px 18px 7px 12px;color:#f4f7ff;
+  box-shadow:0 0 28px rgba(139,92,246,.55),0 0 46px rgba(34,211,238,.25),0 10px 26px rgba(0,0,0,.45)}
+.creator-badge.tt-admin::before{content:"";position:absolute;inset:-2px;border-radius:inherit;z-index:-1;padding:2px;
+  background:conic-gradient(from 0deg,#22d3ee,#a78bfa,#f472b6,#fbbf24,#34d399,#22d3ee);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:ttSpin 2.4s linear infinite}
+.creator-badge.tt-admin::after{content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;background:linear-gradient(135deg,#0b0d1a,#1a1433 55%,#0b0d1a)}
+.creator-badge.tt-admin span{background:linear-gradient(90deg,#c7f9ff,#ffffff,#e9d5ff,#ffffff,#c7f9ff);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:ttFlow 2.2s linear infinite}
+.creator-badge.tt-admin i{color:#e2e8f0;filter:drop-shadow(0 0 6px rgba(167,139,250,.95));animation:ttFloat 2.4s ease-in-out infinite}
+.creator-badge.tt-admin em{font-style:normal;font-size:9px;letter-spacing:1.4px;padding:3px 7px;border-radius:999px;color:#1a1433;background:linear-gradient(180deg,#fff7d1,#fbbf24);box-shadow:0 0 10px rgba(251,191,36,.7)}
+.creator-badge.tt-admin::after{animation:none}
+
+.creator-badge.tt-premium::before,.creator-badge.tt-admin::before{left:-2px;top:-2px;right:-2px;bottom:-2px;width:auto;height:auto;translate:none;aspect-ratio:auto}
+.creator-badge.tt-premium::after{inset:auto;top:0;bottom:0;left:-45%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent)}
+.creator-badge.tt-admin::after{inset:0;left:0;top:0;width:auto;height:auto}
     </style>
 </head>
 <body data-page="beranda">
@@ -2554,21 +2605,12 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
         function lsSaveReviews(a) { localStorage.setItem(RV_LS, JSON.stringify(a)); }
 
         async function fetchReviews(novelId) {
-            if (reviewsRemoteOk) {
-                try {
-                    let q = _supabase.from('reviews').select('*').order('created_at', { ascending: false });
-                    if (novelId) q = q.eq('novel_id', String(novelId));
-                    const { data, error } = await q;
-                    if (error) throw error;
-                    return Array.isArray(data) ? data : [];
-                } catch (e) {
-                    reviewsRemoteOk = false;
-                    console.warn('Tabel reviews belum siap, memakai penyimpanan lokal:', e && e.message);
-                }
-            }
-            return lsReviews()
-                .filter(r => !novelId || String(r.novel_id) === String(novelId))
-                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            let q = _supabase.from('reviews').select('*').order('created_at', { ascending: false });
+            if (novelId) q = q.eq('novel_id', String(novelId));
+            const { data, error } = await q;
+            if (error) throw error;
+            return Array.isArray(data) ? data : [];
+            throw new Error('Ulasan belum bisa dimuat dari database');
         }
 
         function hitungRingkasan(rows) {
@@ -2636,7 +2678,7 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
                 return `<div class="rv-bar"><b>${v}</b><span style="font-size:11px;color:var(--star)">★</span><div class="rv-track"><div class="rv-fill" style="width:${pct}%"></div></div></div>`;
             }).join('');
 
-            const me = getDeviceId();
+            const me = currentUser ? currentUser.id : null;
             const list = document.getElementById('rv-list');
             if (!rows.length) {
                 list.innerHTML = '<div class="rv-empty">Jadilah yang pertama memberi ulasan ✨</div>';
@@ -2666,7 +2708,9 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
             document.getElementById('rv-submit').innerText = 'Kirim Ulasan';
             document.getElementById('rv-form-title').innerText = 'Beri rating karya ini';
             document.getElementById('rv-hint').innerText = '';
-            const rows = await fetchReviews(novelId);
+            let rows = [];
+            try { rows = await fetchReviews(novelId); }
+            catch (e) { document.getElementById('rv-hint').innerText = 'Ulasan belum bisa dimuat: ' + (e.message || e); return; }
             if (String(activeNovelId) !== String(novelId)) return;
             renderUlasan(novelId, rows);
             const idSaya = currentUser ? currentUser.id : null;
@@ -2678,7 +2722,6 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
                 document.getElementById('rv-submit').innerText = 'Perbarui Ulasan';
                 document.getElementById('rv-form-title').innerText = 'Ulasanmu';
             }
-            if (!reviewsRemoteOk) document.getElementById('rv-hint').innerText = 'Ulasan tersimpan di perangkat ini (tabel Supabase belum dibuat).';
         }
 
         async function kirimUlasan() {
@@ -2693,40 +2736,20 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
                 content: document.getElementById('rv-text').value.trim().slice(0, 500),
                 created_at: new Date().toISOString()
             };
-            let saved = false;
-            if (reviewsRemoteOk) {
-                try {
-                    const { error } = await _supabase.from('reviews').upsert(row, { onConflict: 'novel_id,user_identifier' });
-                    if (error) throw error;
-                    saved = true;
-                } catch (e) {
-                    const msg = (e && e.message) || '';
-                    if (/sendiri|Masuk dulu|row-level|duplicate|violates/i.test(msg)) {
-                        showToast(/sendiri/i.test(msg) ? 'Kamu tidak bisa menilai karyamu sendiri' : 'Gagal mengirim ulasan: ' + msg, 'error');
-                        return;
-                    }
-                    reviewsRemoteOk = false;
-                    console.warn('Gagal simpan ke Supabase, pakai lokal:', msg);
-                }
+            const { error: errSimpan } = await _supabase.from('reviews').upsert(row, { onConflict: 'novel_id,user_identifier' });
+            if (errSimpan) {
+                const msg = errSimpan.message || '';
+                showToast(/sendiri/i.test(msg) ? 'Kamu tidak bisa menilai karyamu sendiri' : 'Ulasan gagal disimpan: ' + msg, 'error');
+                return;
             }
-            if (!saved) {
-                const all = lsReviews().filter(r => !(String(r.novel_id) === row.novel_id && r.user_identifier === row.user_identifier));
-                all.push(row); lsSaveReviews(all);
-            }
-            showToast(saved ? 'Ulasan terkirim' : 'Ulasan disimpan di perangkat ini', 'success');
+            showToast('Ulasan tersimpan', 'success');
             await muatUlasan(activeNovelId);
         }
 
         async function hapusUlasanSaya() {
-            if (!activeNovelId) return;
-            const nid = String(activeNovelId), uid = currentUser ? currentUser.id : getDeviceId();
-            if (reviewsRemoteOk) {
-                try {
-                    const { error } = await _supabase.from('reviews').delete().eq('novel_id', nid).eq('user_identifier', uid);
-                    if (error) throw error;
-                } catch (e) { reviewsRemoteOk = false; }
-            }
-            lsSaveReviews(lsReviews().filter(r => !(String(r.novel_id) === nid && r.user_identifier === uid)));
+            if (!activeNovelId || !currentUser) return;
+            const { error } = await _supabase.from('reviews').delete().eq('novel_id', String(activeNovelId)).eq('user_id', currentUser.id);
+            if (error) { showToast('Gagal menghapus: ' + error.message, 'error'); return; }
             showToast('Ulasan dihapus', 'success');
             await muatUlasan(activeNovelId);
         }
@@ -3238,7 +3261,7 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
         }
 
         // ====== DONASI: kreator = akun admin, donatur dengan nama tersensor ======
-        const DONASI_URL = "https://sociabuzz.com/wawnn12/tribe";   // >>> GANTI USERNAME_KAMU dengan username SociaBuzz-mu
+        const DONASI_URL = "https://sociabuzz.com/USERNAME_KAMU";   // >>> GANTI USERNAME_KAMU dengan username SociaBuzz-mu
         function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
         function rpRingkas(n) {
             n = Number(n) || 0;
@@ -3783,7 +3806,20 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
         }
         function tampil(id, on) { const e = document.getElementById(id); if (e) e.style.display = on ? '' : 'none'; }
         function aturTampilanUpload() {
-            const komik = kategoriAktif() === 'Komik';
+            const katAktif = kategoriAktif();
+            const tunggal = (katAktif === 'Cerpen' || katAktif === 'Prosedur');
+            if (tunggal && modeUpload === 'bab') {
+                modeUpload = 'baru';
+                const seg = document.getElementById('upSeg');
+                if (seg) { seg.dataset.pos = '0'; seg.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.dataset.m === 'baru'); }); }
+            }
+            const btnBab = document.querySelector('#upSeg button[data-m="bab"]');
+            if (btnBab) btnBab.style.display = tunggal ? 'none' : '';
+            ['inputSinopsis', 'inputNomorBab', 'inputJudulBab'].forEach(function (id) {
+                const e = document.getElementById(id); const g = e && e.closest('.form-group');
+                if (g) g.style.display = tunggal ? 'none' : '';
+            });
+            const komik = katAktif === 'Komik';
             tampil('grpBaru', modeUpload === 'baru');
             tampil('grpPilihKarya', modeUpload === 'bab');
             tampil('grpTeks', !komik);
@@ -3813,7 +3849,7 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
             }
             const { data, error } = await q;
             if (error) { sel.innerHTML = '<option value="">Gagal memuat</option>'; showToast('Gagal memuat karya: ' + error.message, 'error'); return; }
-            daftarKarya = data || [];
+            daftarKarya = (data || []).filter(function (n) { return n.category !== 'Cerpen' && n.category !== 'Prosedur'; });
             if (!daftarKarya.length) {
                 sel.innerHTML = '<option value="">Belum ada karya — buat Karya Baru dulu</option>';
                 karyaTerpilih = null; document.getElementById('infoKarya').innerText = ''; aturTampilanUpload(); return;
@@ -3893,7 +3929,7 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
                 row.forEach(function (p) {
                     const teks = String(p.text || '').trim();
                     const tipe = k === 1 ? ((tunggal++ % 2) ? 'slant' : 'wide') : 'seg';
-                    const over = teks && ((k === 1 && teks.length <= 140) || (k === 2 && teks.length <= 34));
+                    const over = false;
                     const s = (sisi++ % 2) ? 'r' : 'l';
                     h += '<figure class="kp kp-' + tipe + '"><div class="kp-shape"><img src="' + esc(p.img) + '" alt="" loading="lazy" decoding="async"></div>' +
                         (teks ? '<figcaption class="kp-bubble ' + (over ? 'over ' : 'under ') + s + '">' + esc(teks) + '</figcaption>' : '') + '</figure>';
@@ -3995,10 +4031,11 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
             const kategori = kategoriAktif();
             const komik = kategori === 'Komik';
             const penulis = (userProfile.nama || '').trim();
-            const nomorBab = parseInt(document.getElementById('inputNomorBab').value);
-            const judulBab = document.getElementById('inputJudulBab').value.trim();
             const judul = document.getElementById('inputJudul').value.trim();
-            const sinopsis = document.getElementById('inputSinopsis').value.trim();
+            const tunggal = (kategori === 'Cerpen' || kategori === 'Prosedur') && mode === 'baru';
+            const nomorBab = tunggal ? 1 : parseInt(document.getElementById('inputNomorBab').value);
+            const judulBab = tunggal ? judul : document.getElementById('inputJudulBab').value.trim();
+            const sinopsis = tunggal ? '' : document.getElementById('inputSinopsis').value.trim();
 
             if (!(nomorBab > 0) || !judulBab) { showToast('Isi nomor dan judul bab', 'error'); return; }
             if (mode === 'baru' && !judul) { showToast('Isi judul karya', 'error'); return; }
@@ -4251,44 +4288,42 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
         ];
         const SCOPE_AKUN = { badge: 'creator-title-badge', root: 'akun', prog: 'tier-progress' };
         const SCOPE_DONASI = { badge: 'donasi-badge', root: 'donasi', prog: null };
+        const AMBANG_CENTANG = 1000, AMBANG_PREMIUM = 10000;
+        const SVG_CENTANG = '<svg viewBox="0 0 24 24" aria-label="Terverifikasi"><path fill="#1d9bf0" d="M12 2.2l2.4 2 3.1-.3 1 3 2.6 1.6-.9 3 .9 3-2.6 1.6-1 3-3.1-.3-2.4 2-2.4-2-3.1.3-1-3L2.9 15l.9-3-.9-3 2.6-1.6 1-3 3.1.3z"/><path fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" d="M8 12.3l2.6 2.6L16.2 9.4"/></svg>';
+        const SPARK_HTML = '<b class="spk" style="--x:8%;--y:18%;--d:0s"></b><b class="spk" style="--x:70%;--y:8%;--d:.6s"></b><b class="spk" style="--x:92%;--y:62%;--d:1.2s"></b><b class="spk" style="--x:30%;--y:84%;--d:1.8s"></b>';
         function terapkanTitle(isAdmin, followers, tampilkanProgres, scope) {
             scope = scope || SCOPE_AKUN;
             const badge = document.getElementById(scope.badge);
-            const akun = document.getElementById(scope.root);
+            const root = document.getElementById(scope.root);
             const prog = scope.prog ? document.getElementById(scope.prog) : null;
-            if (!badge || !akun) return;
+            if (!badge || !root) return;
             let key = '';
             if (isAdmin) {
                 key = 'admin';
                 badge.className = 'creator-badge tt-admin';
-                badge.innerHTML = '<i class="fas fa-crown"></i><span>DEVELOPER · ADMIN</span>' +
-                    '<b class="sp" style="--x:8%;--y:22%;--d:0s"></b><b class="sp" style="--x:46%;--y:12%;--d:.7s"></b>' +
-                    '<b class="sp" style="--x:88%;--y:60%;--d:1.4s"></b><b class="sp" style="--x:30%;--y:78%;--d:2s"></b>';
+                badge.innerHTML = '<i class="fas fa-crown"></i><span>DEVELOPER</span><em>ADMIN</em>' + SPARK_HTML;
+            } else if (followers >= AMBANG_PREMIUM) {
+                key = 'premium';
+                badge.className = 'creator-badge tt-premium';
+                badge.innerHTML = '<i class="fas fa-gem"></i><span>PREMIUM CREATOR</span>' + SPARK_HTML;
+            } else if (followers >= AMBANG_CENTANG) {
+                key = 'verified';
+                badge.className = 'creator-badge tt-verified';
+                badge.innerHTML = SVG_CENTANG;
             } else {
-                const t = TITLE_TIERS.find(x => followers >= x.min);
-                if (t) {
-                    key = t.key;
-                    badge.className = 'creator-badge ' + t.cls;
-                    badge.innerHTML = '<i class="fas ' + t.icon + '"></i><span>' + t.label + '</span>' +
-                        (t.key === 'premium' ? '<b class="sp" style="--x:10%;--y:25%;--d:0s"></b><b class="sp" style="--x:55%;--y:15%;--d:.9s"></b><b class="sp" style="--x:90%;--y:65%;--d:1.7s"></b>' : '');
-                } else {
-                    badge.className = 'creator-badge';
-                    badge.innerHTML = '';
-                }
+                badge.className = 'creator-badge';
+                badge.innerHTML = '';
             }
             badge.hidden = !key;
-            if (key) akun.setAttribute('data-tier', key); else akun.removeAttribute('data-tier');
-
-            // progres menuju title berikutnya (hanya di profil sendiri)
+            if (key) root.setAttribute('data-tier', key); else root.removeAttribute('data-tier');
             if (prog) {
-                const berikut = isAdmin ? null : [...TITLE_TIERS].reverse().find(x => followers < x.min);
-                if (tampilkanProgres && berikut) {
-                    const dasar = [...TITLE_TIERS].reverse().filter(x => x.min <= followers).pop();
-                    const awal = dasar ? dasar.min : 0;
-                    const persen = Math.max(4, Math.min(100, Math.round((followers - awal) / (berikut.min - awal) * 100)));
-                    prog.style.display = 'block';
-                    prog.innerHTML = followers + ' / ' + berikut.min + ' pengikut menuju <b>' + berikut.label + '</b><div class="bar"><i style="width:' + persen + '%"></i></div>';
-                } else { prog.style.display = 'none'; prog.innerHTML = ''; }
+                let teks = '';
+                if (tampilkanProgres && !isAdmin) {
+                    if (followers < AMBANG_CENTANG) teks = followers.toLocaleString('id-ID') + ' / ' + AMBANG_CENTANG.toLocaleString('id-ID') + ' pengikut menuju centang biru';
+                    else if (followers < AMBANG_PREMIUM) teks = followers.toLocaleString('id-ID') + ' / ' + AMBANG_PREMIUM.toLocaleString('id-ID') + ' pengikut menuju Premium Creator';
+                }
+                prog.style.display = teks ? 'block' : 'none';
+                prog.textContent = teks;
             }
         }
 
