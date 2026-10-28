@@ -1615,6 +1615,69 @@ html,body{overflow-x:clip}
 .usr-verif{color:#1d9bf0;font-size:14px;margin-left:4px;vertical-align:middle}
 .usr-row .usr-txt b{display:flex;align-items:center}
 
+
+/* =====================================================================
+   V26 - KARTU IDENTITAS ANGGOTA (gaya kartu nama hitam-oranye)
+   ===================================================================== */
+#akun.tamu .kartu-btn,#akun.lihat-orang .kartu-btn{display:none!important}
+.idc{position:relative;width:100%;max-width:340px;aspect-ratio:1.75/1;margin:0 auto;border-radius:18px;overflow:hidden;color:#fff;background:#151515;
+  box-shadow:0 20px 44px rgba(0,0,0,.4);font-family:'Montserrat','Inter','Segoe UI',system-ui,sans-serif;user-select:none}
+.idc-or{position:absolute;inset:0;background:linear-gradient(120deg,#ffb020,#ff7a00);clip-path:polygon(66% 0,100% 0,100% 100%,74% 100%)}
+.idc-or2{display:none}
+.idc-hex{position:absolute;top:50%;right:6%;width:44%;height:76%;transform:translateY(-50%);clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:#0d0d0d;box-shadow:0 0 0 5px #151515 inset}
+.idc-hex::after{content:"";position:absolute;inset:0;clip-path:inherit;background:linear-gradient(160deg,rgba(255,255,255,.08),transparent 45%)}
+.idc-av{position:absolute;top:50%;left:72%;transform:translate(-50%,-50%);width:30%;aspect-ratio:1;border-radius:50%;overflow:hidden;display:grid;place-items:center;
+  background:linear-gradient(135deg,#ffb020,#ff7a00);font-weight:800;font-size:26px;color:#111;border:2px solid rgba(255,255,255,.85)}
+.idc-av img{width:100%;height:100%;object-fit:cover}
+.idc-info{position:absolute;left:7%;top:12%;bottom:12%;width:46%;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.idc-nama{font-size:clamp(14px,4.4vw,19px);font-weight:800;letter-spacing:.3px;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.idc-peran{font-size:9.5px;letter-spacing:2.2px;font-weight:700;color:#ffb020;text-transform:uppercase}
+.idc-row{display:flex;align-items:center;gap:7px;font-size:10px;color:#e5e7eb;letter-spacing:.2px;overflow:hidden;white-space:nowrap}
+.idc-row i{width:14px;text-align:center;color:#ffb020;font-size:10px;flex:none}
+.idc-row span{overflow:hidden;text-overflow:ellipsis}
+.idc-no{position:absolute;left:7%;bottom:6%;font-size:8.5px;letter-spacing:1.6px;color:#8a8a8a}
+.idc-web{position:absolute;right:6%;bottom:6%;font-size:8.5px;letter-spacing:1px;color:#1a1a1a;font-weight:700;text-align:right}
+.idc-kartu-wrap{padding:6px 0 4px}
+.idc-stat{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 8px}
+.idc-stat div{padding:10px;border-radius:16px;background:rgba(120,120,128,.12);text-align:center}
+.idc-stat b{display:block;font-size:17px;font-weight:800}
+.idc-stat small{font-size:11px;color:#64748b}
+html[data-theme="dark"] .idc-stat small{color:#9aa3b5}
+
+
+/* =====================================================================
+   V27 - KARTU IDENTITAS 3D (depan & belakang, bisa diputar 360°)
+   ===================================================================== */
+.kid-overlay{position:fixed;inset:0;z-index:9500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;
+  background:rgba(8,10,16,.55);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%)}
+.kid-overlay.show{display:flex;animation:iosFade .25s ease}
+.kid-title{font-size:20px;font-weight:800;color:#fff;margin:0 0 4px;text-align:center}
+.kid-sub{font-size:13px;color:rgba(255,255,255,.7);margin:0 0 22px;text-align:center}
+.kid-scene{width:min(86vw,340px);aspect-ratio:1.75/1;perspective:1000px;touch-action:none;cursor:grab;position:relative}
+.kid-scene:active{cursor:grabbing}
+.kid-float{width:100%;height:100%;animation:kidFloat 4s ease-in-out infinite}
+@keyframes kidFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.kid-card{position:relative;width:100%;height:100%;transform-style:preserve-3d;will-change:transform}
+.kid-face{position:absolute;inset:0;border-radius:18px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 22px 50px rgba(0,0,0,.5)}
+.kid-face.belakang{transform:rotateY(180deg)}
+.kid-face .idc{max-width:none;height:100%;border-radius:0;box-shadow:none;aspect-ratio:auto}
+.kid-shine{position:absolute;inset:0;pointer-events:none;border-radius:18px;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.22) 45%,transparent 60%);background-size:250% 100%;background-position:var(--sh,50%) 0;mix-blend-mode:screen}
+.kid-back{width:100%;height:100%;position:relative;background:#151515;color:#fff;font-family:'Montserrat','Inter','Segoe UI',system-ui,sans-serif}
+.kid-back .bar{position:absolute;left:0;top:0;bottom:0;width:14%;background:linear-gradient(180deg,#ffb020,#ff7a00)}
+.kid-back .hexo{position:absolute;right:-6%;top:50%;transform:translateY(-50%);width:52%;height:86%;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:linear-gradient(160deg,#ff9f1a,#ff7a00)}
+.kid-back .hexi{position:absolute;right:-6%;top:50%;transform:translateY(-50%);width:46%;height:76%;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:#151515}
+.kid-back .isi{position:absolute;left:20%;top:14%;bottom:14%;right:36%;display:flex;flex-direction:column;justify-content:center;gap:5px}
+.kid-back .judul{font-size:13px;font-weight:800;letter-spacing:2px}
+.kid-back .tag{font-size:9.5px;color:#ffb020;letter-spacing:.6px}
+.kid-back .user{font-size:12px;font-weight:700;margin-top:6px}
+.kid-back .no{font-size:9px;letter-spacing:1.6px;color:#9a9a9a}
+.kid-back .pesan{font-size:9.5px;color:#d1d5db;line-height:1.5;margin-top:4px}
+.kid-btn{margin-top:26px;width:min(86vw,340px);height:50px;border:0;border-radius:999px;font-family:inherit;font-size:16px;font-weight:700;color:#fff;cursor:pointer;
+  background:linear-gradient(180deg,#4f9bff,#1f6fd8);box-shadow:0 10px 22px rgba(31,111,235,.45),inset 0 1px 0 rgba(255,255,255,.5)}
+.kid-btn:active{transform:scale(.97)}
+.kid-hint{font-size:12px;color:rgba(255,255,255,.6);margin-top:12px}
+@media (prefers-reduced-motion:reduce){.kid-float{animation:none}}
+
     </style>
 </head>
 <body data-page="beranda">
@@ -2157,6 +2220,15 @@ html,body{overflow-x:clip}
             <p class="rp-sub">Akun yang pernah login di perangkat ini.</p>
             <div class="acc-group" id="daftarAkunBox"></div>
             <div class="rp-btns"><button type="button" class="gbtn" onclick="keTambahAkun()">Tambah akun lain</button><button type="button" class="gbtn" onclick="tutupGantiAkun()">Tutup</button></div>
+        </div>
+    </div>
+
+    <div class="ios-sheet-ov" id="kartuSheet" onclick="if(event.target===this)tutupKartuIdentitas()">
+        <div class="ios-sheet">
+            <div class="grab"></div>
+            <h3 class="rp-title">Kartu Identitas</h3>
+            <div class="idc-kartu-wrap" id="kartuBox"></div>
+            <div class="rp-btns"><button type="button" class="gbtn block" onclick="tutupKartuIdentitas()">Tutup</button></div>
         </div>
     </div>
 
@@ -3110,6 +3182,7 @@ html,body{overflow-x:clip}
             if (currentUser) await muatProfilSaya();
             else userProfile = Object.assign({}, PROFIL_TAMU);
             segarkanUIAuth();
+            if (currentUser) tampilkanKartuOtomatis();
             if (!document.getElementById('akun').classList.contains('lihat-orang')) muatDataAkunSaya();
         }
         function segarkanUIAuth() {
@@ -3281,7 +3354,7 @@ html,body{overflow-x:clip}
         }
 
         // ====== DONASI: kreator = akun admin, donatur dengan nama tersensor ======
-        const DONASI_URL = " https://sociabuzz.com/wawnn12/tribe";   // >>> GANTI USERNAME_KAMU dengan username SociaBuzz-mu
+        const DONASI_URL = "https://sociabuzz.com/USERNAME_KAMU";   // >>> GANTI USERNAME_KAMU dengan username SociaBuzz-mu
         function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
         function rpRingkas(n) {
             n = Number(n) || 0;
@@ -4307,6 +4380,193 @@ html,body{overflow-x:clip}
         }
         window.addEventListener('pagehide', simpanPosisiSekarang);
         document.addEventListener('visibilitychange', function () { if (document.hidden) simpanPosisiSekarang(); });
+
+        // ====== V26: KARTU IDENTITAS ANGGOTA ======
+        function peranAnggota(isAdmin, followers) {
+            if (isAdmin) return 'Developer';
+            if ((followers || 0) >= 10000) return 'Premium Creator';
+            if ((followers || 0) >= 1000) return 'Kreator Terverifikasi';
+            return 'Anggota';
+        }
+        function nomorAnggota(uid) { return 'WNI-' + String(uid || '').replace(/-/g, '').slice(0, 8).toUpperCase(); }
+        function kartuIdentitasHTML(d) {
+            const avatar = d.pp ? '<img src="' + esc(d.pp) + '" alt="">' : esc(String(d.nama || '?').charAt(0).toUpperCase());
+            return '<div class="idc" role="img" aria-label="Kartu identitas anggota">' +
+                '<div class="idc-or"></div><div class="idc-or2"></div>' +
+                '<div class="idc-hex"></div>' +
+                '<div class="idc-av">' + avatar + '</div>' +
+                '<div class="idc-info">' +
+                '<div class="idc-nama">' + esc(d.nama) + '</div>' +
+                '<div class="idc-peran">' + esc(d.peran) + '</div>' +
+                '<div class="idc-row"><i class="fas fa-at"></i><span>' + esc(d.username) + '</span></div>' +
+                '<div class="idc-row"><i class="fas fa-calendar-days"></i><span>Bergabung ' + esc(d.bergabung) + '</span></div>' +
+                '<div class="idc-row"><i class="fas fa-users"></i><span>' + esc(d.pengikut) + ' pengikut</span></div>' +
+                '</div>' +
+                '<div class="idc-no">NO. ' + esc(d.nomor) + '</div>' +
+                '<div class="idc-web">WEB NOVEL INDIE</div>' +
+                '</div>';
+        }
+        async function bukaKartuIdentitas() {
+            if (!currentUser) { wajibLogin('Masuk dulu untuk melihat kartu identitas'); return; }
+            let created = null, karya = 0;
+            try {
+                const [{ data: p }, { count }] = await Promise.all([
+                    _supabase.from('profiles').select('created_at').eq('id', currentUser.id).maybeSingle(),
+                    _supabase.from('novels').select('id', { count: 'exact', head: true }).eq('author_id', currentUser.id)
+                ]);
+                created = p && p.created_at ? p.created_at : null;
+                karya = count || 0;
+            } catch (e) { }
+            const bergabung = created ? new Date(created).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-';
+            const d = {
+                nama: userProfile.nama || 'Anggota',
+                username: '@' + (userProfile.username || 'pengguna'),
+                pp: userProfile.pp || '',
+                peran: peranAnggota(userProfile.isAdmin, userProfile.followers),
+                bergabung: bergabung,
+                pengikut: (userProfile.followers || 0).toLocaleString('id-ID'),
+                nomor: nomorAnggota(currentUser.id)
+            };
+            document.getElementById('kartuBox').innerHTML = kartuIdentitasHTML(d) +
+                '<div class="idc-stat"><div><b>' + karya + '</b><small>Karya</small></div><div><b>' + esc(d.peran) + '</b><small>Peran</small></div></div>';
+            document.getElementById('kartuSheet').classList.add('show');
+        }
+        function tutupKartuIdentitas() { document.getElementById('kartuSheet').classList.remove('show'); }
+        document.addEventListener('DOMContentLoaded', function () {
+            const bio = document.querySelector('#akun .bio-menu-btn');
+            if (!bio || document.querySelector('#akun .kartu-btn')) return;
+            const b = document.createElement('button');
+            b.type = 'button'; b.className = 'bio-menu-btn kartu-btn';
+            b.innerHTML = '<i class="fas fa-id-card"></i> Kartu Identitas';
+            b.onclick = bukaKartuIdentitas;
+            bio.insertAdjacentElement('afterend', b);
+        });
+
+        // ====== V27: KARTU IDENTITAS 3D (tampil otomatis setelah login) ======
+        let kartuSudahTampil = false, kartuMode = 'otomatis';
+        function kartuBelakangHTML(d) {
+            return '<div class="kid-back"><div class="bar"></div><div class="hexo"></div><div class="hexi"></div>' +
+                '<div class="isi"><div class="judul">WEB NOVEL INDIE</div><div class="tag">Dukung karya indie, baca dengan nyaman</div>' +
+                '<div class="user">' + esc(d.username) + '</div><div class="no">NO. ' + esc(d.nomor) + '</div>' +
+                '<div class="pesan">Terima kasih sudah bergabung. Simpan kartu ini sebagai tanda keanggotaanmu.</div></div></div>';
+        }
+        async function ambilDataKartu() {
+            let created = null, karya = 0;
+            try {
+                const [{ data: p }, { count }] = await Promise.all([
+                    _supabase.from('profiles').select('created_at').eq('id', currentUser.id).maybeSingle(),
+                    _supabase.from('novels').select('id', { count: 'exact', head: true }).eq('author_id', currentUser.id)
+                ]);
+                created = p && p.created_at ? p.created_at : null;
+                karya = count || 0;
+            } catch (e) { }
+            return {
+                nama: userProfile.nama || 'Anggota',
+                username: '@' + (userProfile.username || 'pengguna'),
+                pp: userProfile.pp || '',
+                peran: peranAnggota(userProfile.isAdmin, userProfile.followers),
+                bergabung: created ? new Date(created).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-',
+                pengikut: (userProfile.followers || 0).toLocaleString('id-ID'),
+                nomor: nomorAnggota(currentUser.id),
+                karya: karya
+            };
+        }
+        let kidRotY = 0, kidRotX = 0, kidVel = 0, kidDrag = null, kidRaf = 0;
+        function kidTerapkan() {
+            const card = document.querySelector('#kidCard');
+            if (!card) return;
+            card.style.transform = 'rotateX(' + kidRotX.toFixed(2) + 'deg) rotateY(' + kidRotY.toFixed(2) + 'deg)';
+            const sh = ((kidRotY % 360 + 360) % 360) / 360 * 250;
+            const shine = document.querySelector('#kidShine');
+            if (shine) shine.style.setProperty('--sh', (sh / 2.5).toFixed(1) + '%');
+        }
+        function kidInersia() {
+            kidRaf = 0;
+            if (kidDrag) return;
+            kidRotY += kidVel;
+            kidVel *= 0.92;
+            kidTerapkan();
+            if (Math.abs(kidVel) > 0.05) kidRaf = requestAnimationFrame(kidInersia);
+        }
+        function pasangDragKartu(scene) {
+            scene.addEventListener('pointerdown', function (e) {
+                kidDrag = { x: e.clientX, y: e.clientY };
+                kidVel = 0;
+                if (kidRaf) { cancelAnimationFrame(kidRaf); kidRaf = 0; }
+                scene.setPointerCapture(e.pointerId);
+            });
+            scene.addEventListener('pointermove', function (e) {
+                if (!kidDrag) return;
+                const dx = e.clientX - kidDrag.x, dy = e.clientY - kidDrag.y;
+                kidDrag = { x: e.clientX, y: e.clientY };
+                kidRotY += dx * 0.6;
+                kidRotX = Math.max(-28, Math.min(28, kidRotX - dy * 0.25));
+                kidVel = dx * 0.6;
+                kidTerapkan();
+            });
+            const selesai = function () {
+                kidDrag = null;
+                if (Math.abs(kidVel) > 0.05 && !kidRaf) kidRaf = requestAnimationFrame(kidInersia);
+            };
+            scene.addEventListener('pointerup', selesai);
+            scene.addEventListener('pointercancel', selesai);
+        }
+        function pastikanOverlayKartu() {
+            if (document.getElementById('kidOverlay')) return;
+            const o = document.createElement('div');
+            o.id = 'kidOverlay'; o.className = 'kid-overlay';
+            o.innerHTML = '<h3 class="kid-title" id="kidJudul">Kartu Identitas Kamu</h3><p class="kid-sub">Geser kartu untuk memutarnya 360°</p>' +
+                '<div class="kid-scene" id="kidScene"></div>' +
+                '<button type="button" class="kid-btn" id="kidBtn" onclick="tutupKartuIdentitas()">Oke, lanjut ke menu</button>' +
+                '<div class="kid-hint">Geser ke kiri atau kanan untuk melihat belakang kartu</div>';
+            document.body.appendChild(o);
+            kidScenePasang = false;
+        }
+        let kidScenePasang = false;
+        function renderKartuDepanBelakang(d) {
+            pastikanOverlayKartu();
+            const scene = document.getElementById('kidScene');
+            scene.innerHTML = '<div class="kid-float"><div class="kid-card" id="kidCard">' +
+                '<div class="kid-face depan">' + kartuIdentitasHTML(d) + '<div class="kid-shine" id="kidShine"></div></div>' +
+                '<div class="kid-face belakang">' + kartuBelakangHTML(d) + '</div>' +
+                '</div></div>';
+            kidRotY = 0; kidRotX = 0; kidVel = 0;
+            kidTerapkan();
+            if (!kidScenePasang) { kidScenePasang = true; pasangDragKartu(scene); }
+        }
+        function tampilkanOverlayKartu(mode, d) {
+            kartuMode = mode;
+            renderKartuDepanBelakang(d);
+            document.getElementById('kidBtn').innerText = mode === 'otomatis' ? 'Oke, lanjut ke menu' : 'Tutup';
+            document.getElementById('kidJudul').innerText = mode === 'otomatis' ? 'Kartu Identitas Kamu' : 'Kartu Identitas';
+            document.getElementById('kidOverlay').classList.add('show');
+        }
+        async function tampilkanKartuOtomatis() {
+            if (kartuSudahTampil || !currentUser || !userProfile.id) return;
+            kartuSudahTampil = true;
+            const d = await ambilDataKartu();
+            tampilkanOverlayKartu('otomatis', d);
+        }
+        async function bukaKartuIdentitas() {
+            if (!currentUser) { wajibLogin('Masuk dulu untuk melihat kartu identitas'); return; }
+            const d = await ambilDataKartu();
+            tampilkanOverlayKartu('manual', d);
+        }
+        function tutupKartuIdentitas() {
+            document.getElementById('kidOverlay').classList.remove('show');
+            if (kartuMode === 'otomatis') bukaHalaman('beranda');
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            if (!document.getElementById('kidOverlay')) {
+                const o = document.createElement('div');
+                o.id = 'kidOverlay'; o.className = 'kid-overlay';
+                o.innerHTML = '<h3 class="kid-title" id="kidJudul">Kartu Identitas Kamu</h3><p class="kid-sub">Geser kartu untuk memutarnya 360°</p>' +
+                    '<div class="kid-scene" id="kidScene"></div>' +
+                    '<button type="button" class="kid-btn" id="kidBtn" onclick="tutupKartuIdentitas()">Oke, lanjut ke menu</button>' +
+                    '<div class="kid-hint">Geser ke kiri atau kanan untuk melihat belakang kartu</div>';
+                document.body.appendChild(o);
+            }
+        });
 
         // ====== MODE GELAP ======
         function setTheme(t, animate) {
