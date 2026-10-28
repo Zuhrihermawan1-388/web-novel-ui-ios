@@ -1595,6 +1595,26 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
 .creator-badge.tt-premium::before,.creator-badge.tt-admin::before{left:-2px;top:-2px;right:-2px;bottom:-2px;width:auto;height:auto;translate:none;aspect-ratio:auto}
 .creator-badge.tt-premium::after{inset:auto;top:0;bottom:0;left:-45%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent)}
 .creator-badge.tt-admin::after{inset:0;left:0;top:0;width:auto;height:auto}
+
+/* =====================================================================
+   V23 - PENGATURAN PEMBACA TERLIHAT, POSISI BACA TERSIMPAN
+   ===================================================================== */
+/* animasi halaman tidak menyisakan transform: panel "fixed" di dalam halaman tetap relatif ke layar */
+.page-view.pg-in-r,.page-view.pg-in-l,.page-view.pg-fade{animation-fill-mode:backwards!important}
+
+
+/* =====================================================================
+   V24 - HALAMAN CARI RATA TENGAH, KATEGORI TIDAK MENGGESER HALAMAN, PENGGUNA TERPOPULER
+   ===================================================================== */
+html,body{overflow-x:clip}
+#cari.page-view.active-page{display:flex!important;flex-direction:column;align-items:stretch;margin-left:auto!important;margin-right:auto!important;padding-left:16px!important;padding-right:16px!important;box-sizing:border-box}
+#cari > *{width:100%;max-width:100%;margin-left:0!important;margin-right:0!important;box-sizing:border-box}
+#cari .category-scroll{display:flex!important;overflow-x:auto!important;overflow-y:hidden;width:100%!important;margin:0!important;padding:4px 0 10px!important;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+#cari .category-scroll::-webkit-scrollbar{display:none}
+#cari .category-scroll>*{flex:none}
+.usr-verif{color:#1d9bf0;font-size:14px;margin-left:4px;vertical-align:middle}
+.usr-row .usr-txt b{display:flex;align-items:center}
+
     </style>
 </head>
 <body data-page="beranda">
@@ -1748,7 +1768,7 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
     <div id="readBar"></div>
     <div id="baca-pdf" class="container page-view">
         <div class="reader-header">
-            <button class="ios-back" onclick="bukaHalaman('halaman-detail-novel')"><i class="fas fa-chevron-left"></i><span>Kembali</span></button>
+            <button class="ios-back" onclick="kembaliDariBaca()"><i class="fas fa-chevron-left"></i><span>Kembali</span></button>
             <div style="text-align: center; flex-grow: 1; padding: 0 10px;">
                 <div id="reading-title" style="font-size: 13px; font-weight: bold; color:var(--text);">Judul Karya</div>
                 <div id="reading-ep" style="font-size: 12px; color:var(--muted);">Bab 1</div>
@@ -3261,7 +3281,7 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
         }
 
         // ====== DONASI: kreator = akun admin, donatur dengan nama tersensor ======
-        const DONASI_URL = "https://sociabuzz.com/USERNAME_KAMU";   // >>> GANTI USERNAME_KAMU dengan username SociaBuzz-mu
+        const DONASI_URL = " https://sociabuzz.com/wawnn12/tribe";   // >>> GANTI USERNAME_KAMU dengan username SociaBuzz-mu
         function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
         function rpRingkas(n) {
             n = Number(n) || 0;
@@ -4143,18 +4163,21 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
             const box = document.getElementById('search-results-container');
             box.className = 'usr-list';
             const q = (document.getElementById('searchInput').value || '').trim().replace(/[%_,()*\\]/g, ' ');
-            if (!q) { box.innerHTML = '<p class="usr-empty">Ketik nama atau @username kreator untuk mencari pengguna.</p>'; return; }
-            box.innerHTML = '<p class="usr-empty">Mencari...</p>';
-            const { data, error } = await _supabase.from('profiles')
+            box.innerHTML = '<p class="usr-empty">Memuat...</p>';
+            let req = _supabase.from('profiles')
                 .select('id,username,display_name,avatar_url,is_admin,followers_count')
-                .or('display_name.ilike.%' + q + '%,username.ilike.%' + q + '%')
-                .order('followers_count', { ascending: false }).limit(30);
-            if (error) { box.innerHTML = '<p class="usr-empty">Gagal mencari: ' + esc(error.message) + '</p>'; return; }
-            if (!data || !data.length) { box.innerHTML = '<p class="usr-empty">Pengguna tidak ditemukan.</p>'; return; }
-            box.innerHTML = data.map(function (p) {
+                .order('followers_count', { ascending: false })
+                .limit(100);
+            if (q) req = req.or('display_name.ilike.%' + q + '%,username.ilike.%' + q + '%');
+            const { data, error } = await req;
+            if (error) { box.innerHTML = '<p class="usr-empty">Gagal memuat pengguna: ' + esc(error.message) + '</p>'; return; }
+            if (!data || !data.length) { box.innerHTML = '<p class="usr-empty">' + (q ? 'Pengguna tidak ditemukan.' : 'Belum ada pengguna.') + '</p>'; return; }
+            const judul = q ? 'Hasil pencarian' : 'Kreator terpopuler';
+            box.innerHTML = '<div class="usr-judul">' + judul + ' · ' + data.length + ' pengguna</div>' + data.map(function (p) {
+                const centang = (p.followers_count || 0) >= 1000 ? '<i class="fas fa-circle-check usr-verif"></i>' : '';
                 return '<button type="button" class="usr-row" onclick="bukaProfilPengguna(\'' + esc(p.id) + '\', this)" data-nama="' + esc(p.display_name) + '">' +
                     '<img class="usr-av" src="' + esc(avatarSrc(p.avatar_url, p.display_name)) + '" alt="">' +
-                    '<span class="usr-txt"><b>' + esc(p.display_name) + '</b><small>@' + esc(p.username) + ' · ' + (p.followers_count || 0) + ' pengikut</small></span>' +
+                    '<span class="usr-txt"><b>' + esc(p.display_name) + centang + '</b><small>@' + esc(p.username) + ' · ' + (p.followers_count || 0).toLocaleString('id-ID') + ' pengikut</small></span>' +
                     (p.is_admin ? '<i class="fas fa-crown usr-crown"></i>' : '') + '</button>';
             }).join('');
         }
@@ -4251,6 +4274,39 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
             showToast('Beralih ke @' + acc.username, 'success');
             bukaHalaman('beranda');
         }
+
+        // ====== V23: posisi baca & kembali dari pembaca ======
+        function simpanPosisiSekarang() {
+            const page = document.getElementById('baca-pdf');
+            if (!page || document.body.dataset.page !== 'baca-pdf' || !activeNovelId || !activeEpNumber) return;
+            try { localStorage.setItem(kunciPosisi(), String(Math.round(window.scrollY))); } catch (e) { }
+        }
+        function pulihkanPosisiBertahap() {
+            let target = 0;
+            try { target = parseInt(localStorage.getItem(kunciPosisi()), 10) || 0; } catch (e) { }
+            if (target <= 0) return;
+            const mulai = Date.now();
+            let disentuh = false;
+            ['touchstart', 'wheel', 'keydown'].forEach(function (ev) {
+                window.addEventListener(ev, function () { disentuh = true; }, { once: true, passive: true });
+            });
+            function coba() {
+                if (disentuh) return;
+                const max = document.documentElement.scrollHeight - window.innerHeight;
+                if (max >= target - 2 || Date.now() - mulai > 2500) {
+                    window.scrollTo({ top: Math.min(target, Math.max(0, max)), behavior: 'instant' });
+                }
+                if (Math.abs(window.scrollY - target) > 3 && Date.now() - mulai < 2500) setTimeout(coba, 120);
+            }
+            setTimeout(coba, 60);
+        }
+        function kembaliDariBaca() {
+            simpanPosisiSekarang();
+            if (activeNovelId) bukaDetailNovel(activeNovelId);
+            else bukaHalaman('beranda');
+        }
+        window.addEventListener('pagehide', simpanPosisiSekarang);
+        document.addEventListener('visibilitychange', function () { if (document.hidden) simpanPosisiSekarang(); });
 
         // ====== MODE GELAP ======
         function setTheme(t, animate) {
@@ -4690,6 +4746,7 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
         }
 
         async function bukaBab(novelId, episodeNumber) {
+            simpanPosisiSekarang();
             const { data: ep, error } = await _supabase
                 .from('episodes')
                 .select('*, novels(title, category)')
@@ -4712,7 +4769,7 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
 
             bukaHalaman('baca-pdf');
             terapkanPrefBaca();
-            setTimeout(pulihkanPosisi, 420);
+            pulihkanPosisiBertahap();
 
             const deviceId = getDeviceId();
             await _supabase.from('reading_progress').upsert({
