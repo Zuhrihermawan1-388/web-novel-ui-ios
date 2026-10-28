@@ -1501,6 +1501,43 @@ html[data-theme="dark"] .back-btn{color:#6FB0FF}
 /* lonceng hanya di beranda */
 body.is-admin:not([data-page="beranda"]) .bell-btn{display:none!important}
 
+
+/* =====================================================================
+   V19 - PEMBACA STABIL, TEMA & GAYA KERTAS, GANTI AKUN, COVER WEBP
+   ===================================================================== */
+/* mode imersif dinonaktifkan: header & pengaturan selalu bisa disentuh */
+body[data-page="baca-pdf"].imersif .reader-header,body[data-page="baca-pdf"].imersif .reader-controls,body[data-page="baca-pdf"].imersif #reader-settings-panel{opacity:1!important;pointer-events:auto!important}
+.reader-header{z-index:520}
+.reader-actions i{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;font-size:18px;cursor:pointer}
+.reader-header .ios-back{min-height:44px}
+
+/* tema baru (lembut di mata) */
+#textContentContainer.reader-content.theme-sage{background:#e9efe2;color:#2e3b2b;box-shadow:0 12px 30px rgba(46,59,43,.12)}
+#textContentContainer.reader-content.theme-ocean{background:#e6eff6;color:#1e3348;box-shadow:0 12px 30px rgba(30,51,72,.12)}
+#textContentContainer.reader-content.theme-kopi{background:#2b221a;color:#e7d9c2;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+#textContentContainer.reader-content.theme-kopi p:first-of-type::first-letter{color:#d9a86a}
+.theme-btn.sage{background:#e9efe2;color:#2e3b2b}
+.theme-btn.ocean{background:#e6eff6;color:#1e3348}
+.theme-btn.kopi{background:#2b221a;color:#e7d9c2}
+
+/* gaya kertas (tekstur & pola, ringan: gradien & satu tekstur kecil) */
+#textContentContainer.reader-content.paper-garis{background-image:repeating-linear-gradient(180deg,transparent 0,transparent 27px,rgba(60,50,30,.09) 27px,rgba(60,50,30,.09) 28px);background-attachment:local}
+#textContentContainer.reader-content.paper-tua{background-image:radial-gradient(ellipse at 50% 40%,transparent 52%,rgba(120,80,30,.20) 100%)}
+#textContentContainer.reader-content.paper-grafik{background-image:linear-gradient(rgba(60,80,110,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(60,80,110,.07) 1px,transparent 1px);background-size:24px 24px;background-attachment:local}
+#textContentContainer.reader-content.paper-serat{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .3  0 0 0 0 .22  0 0 0 0 .12  0 0 0 .07 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")}
+
+/* akun: daftar ganti akun */
+.acc-row{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border:0;background:transparent;font-family:inherit;color:inherit;text-align:left;cursor:pointer;border-top:.5px solid rgba(60,60,67,.14)}
+.acc-row:first-child{border-top:0}
+.acc-row .fa-check{color:var(--blue);margin-left:auto}
+.acc-av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--blue-2),var(--green));flex:none}
+.acc-txt{display:flex;flex-direction:column;min-width:0;flex:1}
+.acc-txt b{font-size:15.5px}
+.acc-txt small{font-size:12px;color:#64748b;margin-top:2px}
+html[data-theme="dark"] .acc-txt small{color:#9aa3b5}
+.acc-group{border-radius:20px;overflow:hidden;background:rgba(255,255,255,.7);border:.5px solid rgba(60,60,67,.14);margin-bottom:12px;max-height:50vh;overflow-y:auto}
+html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.1)}
+
     </style>
 </head>
 <body data-page="beranda">
@@ -1802,6 +1839,7 @@ body.is-admin:not([data-page="beranda"]) .bell-btn{display:none!important}
                 <div class="menu-row" onclick="toggleTheme()"><i class="fas fa-moon"></i> Mode Gelap <span class="ios-switch" id="switch-theme"></span></div>
                 <div class="menu-row" onclick="bukaModalPassword()"><i class="fas fa-key"></i> Ganti Password <i class="fas fa-chevron-right"></i></div>
                 <div class="menu-row" onclick="bukaHalaman('donasi')"><i class="fas fa-hand-holding-heart"></i> Donasi Kreator <i class="fas fa-chevron-right"></i></div>
+                <div class="menu-row" onclick="bukaGantiAkun()"><i class="fas fa-right-left" style="background:#0a84ff"></i> Ganti Akun <i class="fas fa-chevron-right"></i></div>
                 <div class="menu-row danger" id="auth-row" onclick="aksiAuth()"><i class="fas fa-sign-out-alt" id="auth-row-icon"></i> <span id="auth-row-text">Keluar Akun</span> <i class="fas fa-chevron-right"></i></div>
             </div>
         </div>
@@ -2032,6 +2070,16 @@ body.is-admin:not([data-page="beranda"]) .bell-btn{display:none!important}
                 <button type="button" class="gbtn" onclick="tutupTolak()">Batal</button>
                 <button type="button" class="gbtn red" onclick="kirimTolak()">Tolak Karya</button>
             </div>
+        </div>
+    </div>
+
+    <div class="ios-sheet-ov" id="switchSheet" onclick="if(event.target===this)tutupGantiAkun()">
+        <div class="ios-sheet">
+            <div class="grab"></div>
+            <h3 class="rp-title">Ganti Akun</h3>
+            <p class="rp-sub">Akun yang pernah login di perangkat ini.</p>
+            <div class="acc-group" id="daftarAkunBox"></div>
+            <div class="rp-btns"><button type="button" class="gbtn" onclick="keLogin()">Tambah akun lain</button><button type="button" class="gbtn" onclick="tutupGantiAkun()">Tutup</button></div>
         </div>
     </div>
 
@@ -2456,8 +2504,8 @@ body.is-admin:not([data-page="beranda"]) .bell-btn{display:none!important}
             });
         }
         async function unggahPoster(blob) {
-            const kecil = blob.__opt ? blob : await optimasiGambar(blob, { maxSide: 900, maxBytes: 230 * 1024 });
-            const path = `poster_${Date.now()}_${Math.random().toString(36).slice(2, 7)}.jpg`;
+            const kecil = await optimasiGambar(blob, { maxSide: 900, maxBytes: 230 * 1024, webp: true, force: true });
+            const path = `poster_${Date.now()}_${Math.random().toString(36).slice(2, 7)}.${kecil.type === 'image/webp' ? 'webp' : 'jpg'}`;
             try {
                 const { error } = await _supabase.storage.from('posters').upload(path, kecil, { contentType: kecil.type || 'image/jpeg', upsert: false });
                 if (error) throw error;
@@ -2466,8 +2514,7 @@ body.is-admin:not([data-page="beranda"]) .bell-btn{display:none!important}
                 return { url: data.publicUrl, via: 'storage' };
             } catch (e) {
                 console.warn("Upload cover ke bucket 'posters' gagal:", e && e.message ? e.message : e);
-                const mini = await optimasiGambar(blob, { maxSide: 560, maxBytes: 110 * 1024, force: true });
-                return { url: await blobKeDataURL(mini), via: 'inline' };
+                throw new Error("Cover gagal diunggah ke bucket 'posters'. Jalankan supabase_perbaikan_upload.sql dulu.");
             }
         }
         function resetFormUnggahBab() {
@@ -3003,6 +3050,7 @@ body.is-admin:not([data-page="beranda"]) .bell-btn{display:none!important}
         }
         let uidTerakhir = undefined;
         async function terapkanSesi(session) {
+            catatAkun(session);
             currentUser = session && session.user ? session.user : null;
             const uid = currentUser ? currentUser.id : null;
             if (uid === uidTerakhir) return;
@@ -3023,6 +3071,7 @@ body.is-admin:not([data-page="beranda"]) .bell-btn{display:none!important}
         }
         async function aksiAuth() {
             if (!currentUser) { keLogin(); return; }
+            if (currentUser) simpanDaftarAkun(ambilAkunTersimpan().filter(function (a) { return a.id !== currentUser.id; }));
             await _supabase.auth.signOut();
             showToast('Berhasil keluar akun', 'success');
         }
@@ -3491,6 +3540,9 @@ body.is-admin:not([data-page="beranda"]) .bell-btn{display:none!important}
             try { font = localStorage.getItem('reader_font') || font; tema = localStorage.getItem('reader_tema') || tema; } catch (e) { }
             ubahJenisHuruf(font);
             ubahTemaReader(tema);
+            let kertas = 'polos';
+            try { kertas = localStorage.getItem('reader_kertas') || 'polos'; } catch (e) { }
+            ubahGayaKertas(kertas);
             currentFontSize = parseFloat(getComputedStyle(document.getElementById('textContentContainer')).fontSize) || 17;
         }
         function kunciPosisi() { return 'posisi_baca_' + activeNovelId + '_' + activeEpNumber; }
@@ -3514,7 +3566,7 @@ body.is-admin:not([data-page="beranda"]) .bell-btn{display:none!important}
         document.addEventListener('DOMContentLoaded', function () {
             const box = document.getElementById('textContentContainer');
             if (box) box.addEventListener('click', function () {
-                if (document.body.dataset.page === 'baca-pdf') document.body.classList.toggle('imersif');
+                
             });
         });
         // simpan tema yang dipilih
@@ -4110,6 +4162,50 @@ body.is-admin:not([data-page="beranda"]) .bell-btn{display:none!important}
             if (bell) bell.innerHTML = BELL_SVG + '<span class="bell-badge" hidden>0</span>';
         });
 
+        // ====== V19: daftar akun di perangkat ======
+        const AKUN_KEY = 'akun_tersimpan';
+        function ambilAkunTersimpan() { try { return JSON.parse(localStorage.getItem(AKUN_KEY)) || []; } catch (e) { return []; } }
+        function simpanDaftarAkun(l) { try { localStorage.setItem(AKUN_KEY, JSON.stringify(l)); } catch (e) { } }
+        function catatAkun(session) {
+            if (!session || !session.user || !session.refresh_token) return;
+            const u = session.user;
+            const label = String(u.email || '').split('@')[0] || 'akun';
+            const daftar = ambilAkunTersimpan().filter(function (a) { return a.id !== u.id; });
+            daftar.unshift({ id: u.id, username: label, rt: session.refresh_token });
+            simpanDaftarAkun(daftar.slice(0, 5));
+        }
+        function bukaGantiAkun() {
+            const box = document.getElementById('daftarAkunBox');
+            const l = ambilAkunTersimpan();
+            const aktif = currentUser ? currentUser.id : null;
+            box.innerHTML = l.length ? l.map(function (a) {
+                const sedang = a.id === aktif;
+                return '<button type="button" class="acc-row" data-id="' + esc(a.id) + '" onclick="pindahAkun(this.dataset.id)">' +
+                    '<span class="acc-av">' + esc(String(a.username).charAt(0).toUpperCase()) + '</span>' +
+                    '<span class="acc-txt"><b>@' + esc(a.username) + '</b><small>' + (sedang ? 'Sedang digunakan' : 'Ketuk untuk beralih') + '</small></span>' +
+                    (sedang ? '<i class="fas fa-check"></i>' : '') + '</button>';
+            }).join('') : '<p class="usr-empty">Belum ada akun tersimpan di perangkat ini.</p>';
+            document.getElementById('switchSheet').classList.add('show');
+        }
+        function tutupGantiAkun() { document.getElementById('switchSheet').classList.remove('show'); }
+        async function pindahAkun(id) {
+            if (currentUser && id === currentUser.id) { tutupGantiAkun(); return; }
+            const acc = ambilAkunTersimpan().find(function (a) { return a.id === id; });
+            tutupGantiAkun();
+            if (!acc) { showToast('Akun tidak ditemukan', 'error'); return; }
+            const { data, error } = await _supabase.auth.refreshSession({ refresh_token: acc.rt });
+            if (error || !data || !data.session) {
+                simpanDaftarAkun(ambilAkunTersimpan().filter(function (a) { return a.id !== id; }));
+                showToast('Sesi @' + acc.username + ' sudah habis. Silakan login ulang.', 'error');
+                setTimeout(keLogin, 900);
+                return;
+            }
+            catatAkun(data.session);
+            await terapkanSesi(data.session);
+            showToast('Beralih ke @' + acc.username, 'success');
+            bukaHalaman('beranda');
+        }
+
         // ====== MODE GELAP ======
         function setTheme(t, animate) {
             const root = document.documentElement;
@@ -4605,7 +4701,9 @@ body.is-admin:not([data-page="beranda"]) .bell-btn{display:none!important}
 
         function toggleReaderSettings() {
             const panel = document.getElementById('reader-settings-panel');
-            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+            document.body.classList.remove('imersif');
+            const terbuka = getComputedStyle(panel).display !== 'none';
+            panel.style.display = terbuka ? 'none' : 'block';
         }
 
         function ubahUkuranFont(step) {
@@ -4615,14 +4713,54 @@ body.is-admin:not([data-page="beranda"]) .bell-btn{display:none!important}
             document.getElementById('textContentContainer').style.fontSize = currentFontSize + 'px';
         }
 
+        const TEMA_BACA = ['light', 'sepia', 'sage', 'ocean', 'kopi', 'dark'];
+        const KERTAS_BACA = ['polos', 'garis', 'tua', 'grafik', 'serat'];
         function ubahTemaReader(themeName) {
-            const contentBox = document.getElementById('textContentContainer');
-            contentBox.classList.remove('theme-dark', 'theme-light', 'theme-sepia');
-            contentBox.classList.add('theme-' + themeName);
-            
-            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelector('.theme-btn.' + themeName).classList.add('active');
+            if (TEMA_BACA.indexOf(themeName) < 0) themeName = 'sepia';
+            const box = document.getElementById('textContentContainer');
+            box.classList.remove.apply(box.classList, TEMA_BACA.map(function (t) { return 'theme-' + t; }));
+            box.classList.add('theme-' + themeName);
+            document.querySelectorAll('.theme-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.tema === themeName); });
         }
+        function ubahGayaKertas(g) {
+            if (KERTAS_BACA.indexOf(g) < 0) g = 'polos';
+            const box = document.getElementById('textContentContainer');
+            box.classList.remove.apply(box.classList, KERTAS_BACA.map(function (k) { return 'paper-' + k; }));
+            if (g !== 'polos') box.classList.add('paper-' + g);
+            document.querySelectorAll('.paper-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.kertas === g); });
+            try { localStorage.setItem('reader_kertas', g); } catch (e) { }
+        }
+        function pasangPilihanTema() {
+            const baris = document.querySelector('.theme-btn.sepia');
+            if (!baris || baris.parentNode.dataset.dipasang) return;
+            const wadah = baris.parentNode;
+            wadah.dataset.dipasang = '1';
+            const namaTema = { light: 'Terang', sepia: 'Sepia', sage: 'Sage', ocean: 'Laut', kopi: 'Kopi', dark: 'Gelap' };
+            Object.keys(namaTema).forEach(function (t) {
+                if (wadah.querySelector('.theme-btn.' + t)) return;
+                const b = document.createElement('button');
+                b.type = 'button'; b.className = 'btn-setting theme-btn ' + t; b.dataset.tema = t;
+                b.textContent = namaTema[t];
+                b.onclick = function () { ubahTemaReader(t); try { localStorage.setItem('reader_tema', t); } catch (e) { } };
+                wadah.appendChild(b);
+            });
+            wadah.querySelectorAll('.theme-btn').forEach(function (b) {
+                if (!b.dataset.tema) b.dataset.tema = (b.className.match(/theme-btn (\w+)/) || [])[1] || '';
+            });
+            const baru = document.createElement('div');
+            baru.className = 'settings-row';
+            baru.innerHTML = '<span class="settings-label">Gaya Kertas</span><div class="settings-options" id="pilihKertas"></div>';
+            const kertasLbl = { polos: 'Polos', garis: 'Garis', tua: 'Tua', grafik: 'Grafik', serat: 'Serat' };
+            const opsi = baru.querySelector('#pilihKertas');
+            Object.keys(kertasLbl).forEach(function (k) {
+                const b = document.createElement('button');
+                b.type = 'button'; b.className = 'btn-setting paper-btn'; b.dataset.kertas = k; b.textContent = kertasLbl[k];
+                b.onclick = function () { ubahGayaKertas(k); };
+                opsi.appendChild(b);
+            });
+            wadah.closest('.settings-row').insertAdjacentElement('afterend', baru);
+        }
+        document.addEventListener('DOMContentLoaded', pasangPilihanTema);
 
         async function muatRiwayatLanjutBaca() {
             const deviceId = getDeviceId();
