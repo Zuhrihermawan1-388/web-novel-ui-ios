@@ -1678,6 +1678,18 @@ html[data-theme="dark"] .idc-stat small{color:#9aa3b5}
 .kid-hint{font-size:12px;color:rgba(255,255,255,.6);margin-top:12px}
 @media (prefers-reduced-motion:reduce){.kid-float{animation:none}}
 
+
+/* =====================================================================
+   V28 - LATAR PROFIL (blur iOS 26), KARTU SEKALI TAMPIL
+   ===================================================================== */
+#akun{position:relative}
+.profil-latar{position:absolute;left:0;right:0;top:0;height:300px;z-index:0;overflow:hidden;pointer-events:none;background:linear-gradient(160deg,#3b82f6,#8b5cf6 55%,#f59e0b);transition:opacity .4s}
+.profil-latar-img{position:absolute;inset:-36px;background-size:cover;background-position:center;filter:blur(20px) saturate(150%);transform:scale(1.08);will-change:transform}
+.profil-latar::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.18) 45%,rgba(243,246,252,.92) 88%,var(--bg-main,#f2f6fc) 100%);-webkit-backdrop-filter:blur(16px) saturate(190%) brightness(1.04);backdrop-filter:blur(16px) saturate(190%) brightness(1.04);-webkit-mask-image:linear-gradient(180deg,#000 55%,transparent 100%);mask-image:linear-gradient(180deg,#000 55%,transparent 100%)}
+html[data-theme="dark"] .profil-latar::after{background:linear-gradient(180deg,rgba(12,15,22,.25),rgba(12,15,22,.5) 45%,rgba(12,15,22,.92) 88%,#0c0f16 100%)}
+.profil-latar:empty{display:none}
+#akun .tiktok-profile{position:relative;z-index:1}
+#akun .tab-content-area,#akun .tiktok-tabs{position:relative;z-index:1}
     </style>
 </head>
 <body data-page="beranda">
@@ -1924,6 +1936,7 @@ html[data-theme="dark"] .idc-stat small{color:#9aa3b5}
                 <i class="fas fa-chevron-left"></i> Kembali
             </button>
 
+            <div id="profilLatarPlaceholder" hidden></div>
             <div class="ig-top">
             <div class="avatar-wrap">
                 <img id="profile-page-avatar" src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%233B8BFF%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%2322C55E%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22url%28%23g%29%22%2F%3E%3Ctext%20x%3D%2250%22%20y%3D%2266%22%20font-family%3D%22-apple-system%2CArial%2Csans-serif%22%20font-size%3D%2248%22%20font-weight%3D%22700%22%20fill%3D%22%23fff%22%20text-anchor%3D%22middle%22%3EW%3C%2Ftext%3E%3C%2Fsvg%3E" class="profile-avatar" alt="Profil">
@@ -2149,7 +2162,9 @@ html[data-theme="dark"] .idc-stat small{color:#9aa3b5}
             <div class="sheet-group">
                 <button type="button" class="sheet-item" onclick="menuProfil('bio')"><i class="fas fa-pen"></i> Ubah Bio</button>
                 <button type="button" class="sheet-item" onclick="menuProfil('nama')"><i class="fas fa-signature"></i> Ubah Nama</button>
+                <button type="button" class="sheet-item" onclick="menuProfil('latar')"><i class="fas fa-panorama"></i> Ganti Latar Profil</button>
                 <button type="button" class="sheet-item" onclick="menuProfil('foto')"><i class="fas fa-image"></i> Pilih Foto dari Galeri</button>
+                <button type="button" class="sheet-item danger" onclick="menuProfil('hapus-latar')"><i class="fas fa-eraser"></i> Hapus Latar Profil</button>
                 <button type="button" class="sheet-item danger" onclick="menuProfil('hapus')"><i class="fas fa-trash-can"></i> Hapus Foto Profil</button>
             </div>
             <div class="sheet-group">
@@ -3147,7 +3162,7 @@ html[data-theme="dark"] .idc-stat small{color:#9aa3b5}
         async function muatProfilSaya() {
             if (!currentUser) return;
             const { data, error } = await _supabase.from('profiles')
-                .select('id,username,display_name,bio,avatar_url,is_admin,followers_count').eq('id', currentUser.id).maybeSingle();
+                .select('id,username,display_name,bio,avatar_url,cover_url,is_admin,followers_count').eq('id', currentUser.id).maybeSingle();
             if (error) console.warn('Gagal memuat profil:', error.message);
             let p = data;
             if (!p) {
@@ -3157,7 +3172,7 @@ html[data-theme="dark"] .idc-stat small{color:#9aa3b5}
                     id: currentUser.id,
                     username: dasar0.length >= 3 ? dasar0 : 'user' + dasar0,
                     display_name: dasar0.length >= 2 ? dasar0 : 'kreator'
-                }]).select('id,username,display_name,bio,avatar_url,is_admin,followers_count');
+                }]).select('id,username,display_name,bio,avatar_url,cover_url,is_admin,followers_count');
                 if (!ins.error && ins.data && ins.data[0]) p = ins.data[0];
             }
             p = p || {};
@@ -3168,6 +3183,7 @@ html[data-theme="dark"] .idc-stat small{color:#9aa3b5}
                 username: p.username || dasar.toLowerCase().replace(/[^a-z0-9_]/g, ''),
                 bio: p.bio || '',
                 pp: p.avatar_url || '',
+                cover: p.cover_url || '',
                 isAdmin: !!p.is_admin,
                 followers: p.followers_count || 0
             };
@@ -3378,7 +3394,7 @@ html[data-theme="dark"] .idc-stat small{color:#9aa3b5}
             // kreator = akun admin
             try {
                 const { data } = await _supabase.from('profiles')
-                    .select('id,username,display_name,bio,avatar_url,is_admin,followers_count')
+                    .select('id,username,display_name,bio,avatar_url,cover_url,is_admin,followers_count')
                     .eq('is_admin', true).order('created_at', { ascending: true }).limit(1);
                 const p = data && data[0];
                 if (p) {
@@ -4568,6 +4584,87 @@ html[data-theme="dark"] .idc-stat small{color:#9aa3b5}
             }
         });
 
+
+        // ====== V28: LATAR PROFIL & KARTU SEKALI TAMPIL ======
+        function aturLatarProfil(url) {
+            let el = document.getElementById('profilLatar');
+            const akun = document.getElementById('akun');
+            if (!el && akun) { el = document.createElement('div'); el.id = 'profilLatar'; el.className = 'profil-latar'; akun.insertBefore(el, akun.firstChild); }
+            if (!el) return;
+            el.innerHTML = '';
+            if (!url) { el.style.display = 'none'; return; }
+            el.style.display = '';
+            const img = document.createElement('div');
+            img.className = 'profil-latar-img';
+            img.style.backgroundImage = 'url("' + String(url).replace(/["\\\n\r]/g, '') + '")';
+            el.appendChild(img);
+        }
+        async function simpanLatarBaru(blob) {
+            const path = currentUser.id + '/latar.webp';
+            const { error } = await _supabase.storage.from('latar').upload(path, blob, { contentType: blob.type || 'image/webp', upsert: true, cacheControl: '86400' });
+            if (error) throw new Error("Upload latar gagal (" + error.message + "). Jalankan supabase_latar_profil.sql dulu.");
+            const { data } = _supabase.storage.from('latar').getPublicUrl(path);
+            return data.publicUrl + '?v=' + Date.now();
+        }
+        function pilihLatarProfil() {
+            if (!wajibLogin('Masuk dulu untuk mengganti latar profil')) return;
+            const inp = document.createElement('input');
+            inp.type = 'file'; inp.accept = 'image/*';
+            inp.onchange = async function () {
+                const file = inp.files && inp.files[0];
+                if (!file) return;
+                showToast('Memproses latar...', 'info');
+                try {
+                    const kecil = await optimasiGambar(file, { maxSide: 1280, maxBytes: 220 * 1024, webp: true, q: 0.85, force: true });
+                    const url = await simpanLatarBaru(kecil);
+                    const { error } = await simpanProfilDB({ cover_url: url });
+                    if (error) throw error;
+                    userProfile.cover = url;
+                    aturLatarProfil(url);
+                    showToast('Latar profil diperbarui (' + formatUkuran(file.size) + ' → ' + formatUkuran(kecil.size) + ')', 'success');
+                } catch (e) { showToast((e && e.message) || 'Gagal menyimpan latar', 'error'); }
+            };
+            inp.click();
+        }
+        async function hapusLatarProfil() {
+            if (!currentUser) return;
+            const { error } = await simpanProfilDB({ cover_url: '' });
+            if (error) { showToast('Gagal: ' + error.message, 'error'); return; }
+            userProfile.cover = '';
+            aturLatarProfil('');
+            showToast('Latar profil dihapus', 'success');
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            const akun = document.getElementById('akun');
+            if (akun && !document.getElementById('profilLatar')) {
+                const d = document.createElement('div');
+                d.id = 'profilLatar'; d.className = 'profil-latar';
+                akun.insertBefore(d, akun.firstChild);
+            }
+        });
+        const _menuProfilV27 = menuProfil;
+        menuProfil = function (aksi) {
+            if (aksi === 'latar') { tutupMenuProfil(); pilihLatarProfil(); return; }
+            if (aksi === 'hapus-latar') { tutupMenuProfil(); hapusLatarProfil(); return; }
+            return _menuProfilV27(aksi);
+        };
+
+        async function tampilkanKartuOtomatis() {
+            if (kartuSudahTampil || !currentUser || !userProfile.id) return;
+            let rec = {};
+            try { rec = JSON.parse(localStorage.getItem('kartu_tampil') || '{}') || {}; } catch (e) { rec = {}; }
+            const loginBaru = !!localStorage.getItem('login_baru');
+            const terakhir = rec[currentUser.id] || 0;
+            const sudahLama = !terakhir || (Date.now() - terakhir > 7 * 86400000);
+            if (!loginBaru && !sudahLama) return;
+            kartuSudahTampil = true;
+            try { localStorage.removeItem('login_baru'); } catch (e) { }
+            rec[currentUser.id] = Date.now();
+            try { localStorage.setItem('kartu_tampil', JSON.stringify(rec)); } catch (e) { }
+            const d = await ambilDataKartu();
+            tampilkanOverlayKartu('otomatis', d);
+        }
+
         // ====== MODE GELAP ======
         function setTheme(t, animate) {
             const root = document.documentElement;
@@ -4736,6 +4833,7 @@ html[data-theme="dark"] .idc-stat small{color:#9aa3b5}
             profilDilihat = null; sedangMengikuti = false; aturTombolFollow(false);
             if (currentUser) await muatProfilSaya();
 
+            aturLatarProfil(userProfile.cover || '');
             document.getElementById('profile-page-name').innerText = userProfile.nama;
             document.getElementById('profile-page-username').innerText = userProfile.username ? "@" + userProfile.username : "";
             document.getElementById('profile-page-bio').innerText = userProfile.bio || (currentUser ? "Belum ada bio. Ketuk “Ubah Profil” untuk menambahkan." : PROFIL_TAMU.bio);
@@ -4844,7 +4942,7 @@ html[data-theme="dark"] .idc-stat small{color:#9aa3b5}
 
             // profil kreator dari database
             try {
-                let q = _supabase.from('profiles').select('id,username,display_name,bio,avatar_url,is_admin,followers_count');
+                let q = _supabase.from('profiles').select('id,username,display_name,bio,avatar_url,cover_url,is_admin,followers_count');
                 q = authorId ? q.eq('id', authorId) : q.ilike('display_name', String(namaPenulis).replace(/[%_\\]/g, '\\$&'));
                 const { data: rows } = await q.limit(1);
                 const p = rows && rows[0];
@@ -4852,6 +4950,7 @@ html[data-theme="dark"] .idc-stat small{color:#9aa3b5}
                     profilDilihat = { id: p.id, nama: p.display_name, followers: p.followers_count || 0, isAdmin: !!p.is_admin };
                     document.getElementById('profile-page-name').innerText = p.display_name;
                     document.getElementById('profile-page-username').innerText = "@" + p.username;
+                    aturLatarProfil(p.cover_url || '');
                     document.getElementById('profile-page-bio').innerText = p.bio || "Belum ada bio.";
                     document.getElementById('profile-page-avatar').src = avatarSrc(p.avatar_url, p.display_name);
                     document.getElementById('profile-followers-count').innerText = profilDilihat.followers;
