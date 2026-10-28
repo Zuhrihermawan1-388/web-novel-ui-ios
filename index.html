@@ -1538,6 +1538,12 @@ html[data-theme="dark"] .acc-txt small{color:#9aa3b5}
 .acc-group{border-radius:20px;overflow:hidden;background:rgba(255,255,255,.7);border:.5px solid rgba(60,60,67,.14);margin-bottom:12px;max-height:50vh;overflow-y:auto}
 html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.1)}
 
+/* pilihan pengaturan pembaca bisa digeser ke samping */
+#reader-settings-panel .settings-row{flex-direction:column;align-items:stretch;gap:10px}
+#reader-settings-panel .settings-options{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;gap:8px;padding:2px 2px 8px;width:100%;min-width:0;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-x;scroll-snap-type:x proximity}
+#reader-settings-panel .settings-options::-webkit-scrollbar{display:none}
+#reader-settings-panel .settings-options>*{flex:none;scroll-snap-align:start;white-space:nowrap}
     </style>
 </head>
 <body data-page="beranda">
@@ -2079,7 +2085,7 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
             <h3 class="rp-title">Ganti Akun</h3>
             <p class="rp-sub">Akun yang pernah login di perangkat ini.</p>
             <div class="acc-group" id="daftarAkunBox"></div>
-            <div class="rp-btns"><button type="button" class="gbtn" onclick="keLogin()">Tambah akun lain</button><button type="button" class="gbtn" onclick="tutupGantiAkun()">Tutup</button></div>
+            <div class="rp-btns"><button type="button" class="gbtn" onclick="keTambahAkun()">Tambah akun lain</button><button type="button" class="gbtn" onclick="tutupGantiAkun()">Tutup</button></div>
         </div>
     </div>
 
@@ -3010,6 +3016,9 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
         function tutupUpload() { document.getElementById('modalUpload').style.display = 'none'; }
 
         // ====== AKUN & PROFIL (Supabase Auth + tabel profiles) ======
+        function keTambahAkun() {
+            location.href = LOGIN_URL + '?tambah=1&kembali=' + encodeURIComponent(location.href);
+        }
         function keLogin() {
             const sep = LOGIN_URL.indexOf('?') >= 0 ? '&' : '?';
             location.href = LOGIN_URL + sep + 'kembali=' + encodeURIComponent(location.href);
@@ -3229,7 +3238,7 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
         }
 
         // ====== DONASI: kreator = akun admin, donatur dengan nama tersensor ======
-        const DONASI_URL = "https://sociabuzz.com/wawnn12/tribe";   // >>> GANTI dengan link Saweria / Trakteer / QRIS-mu
+        const DONASI_URL = "https://sociabuzz.com/USERNAME_KAMU";   // >>> GANTI USERNAME_KAMU dengan username SociaBuzz-mu
         function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
         function rpRingkas(n) {
             n = Number(n) || 0;
@@ -4197,7 +4206,7 @@ html[data-theme="dark"] .acc-group{background:rgba(255,255,255,.07);border-color
             if (error || !data || !data.session) {
                 simpanDaftarAkun(ambilAkunTersimpan().filter(function (a) { return a.id !== id; }));
                 showToast('Sesi @' + acc.username + ' sudah habis. Silakan login ulang.', 'error');
-                setTimeout(keLogin, 900);
+                setTimeout(keTambahAkun, 900);
                 return;
             }
             catatAkun(data.session);
